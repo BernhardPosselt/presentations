@@ -115,17 +115,20 @@ class Sum {
 
 ```java
 List<String> names = Lists.newArrayList("a", "test", "hi");
+Sum sum = new Sum();
 names.stream()
     .map(String::length)
-    .reduce(new Sum())
+    .reduce(sum.identity(), sum::sum)
 ```
 
 ---
 
-# Monoid
+# Extract Generic Monoid
 
 ```java
 T reduce(Monoid<T> monoid)
+
+stream.reduce(new Sum())
 ```
 
 ```java
