@@ -8,20 +8,20 @@ class: center, middle
 
 ```java
 List<String> names = Lists.newArrayList("a", "test", "hi");
-names.stream()
+Integer numChars = names.stream()
     .map(String::length)
     .reduce(0, (a, b) -> a + b)
 ```
 Parallel:
 ```java
-names.parallelStream()
+Integer numChars = names.parallelStream()
     .map(String::length)
     .reduce(0, (a, b) -> a + b)
 ```
 
 Distributed:
 ```java
-names.streamOnAmazon()
+Integer numChars = names.streamOnAmazon()
     .map(String::length)
     .reduce(0, (a, b) -> a + b)
 ```
@@ -47,7 +47,7 @@ Integer reduce(Integer identity, BinaryOperator<Integer> accumulator)
 
 ---
 
-# Algebraic Structures
+# (Some) Algebraic Structures
 
 Given an operation of form a • b in S
 
@@ -87,7 +87,7 @@ I do not need to sort my values beforehand, enables async value generation
 
 ```java
 List<String> names = Lists.newArrayList("a", "test", "hi");
-names.stream()
+Integer numChars = names.stream()
     .map(String::length)
     .reduce(0, (a, b) -> a + b)
 ```
@@ -116,7 +116,7 @@ class Sum {
 ```java
 List<String> names = Lists.newArrayList("a", "test", "hi");
 Sum sum = new Sum();
-names.stream()
+Integer numChars = names.stream()
     .map(String::length)
     .reduce(sum.identity(), sum::sum)
 ```
@@ -168,6 +168,8 @@ class Sum implements CommunativeMonoid<Integer> {
 }
 ```
 
+Typesafe way to use unordered streams
+
 ---
 
 # Combining Optionals
@@ -190,7 +192,7 @@ class FirstPresent<T> implements Monoid<Optional<T>> {
 
 ```java
 List<String> names = Lists.newArrayList(null, "a", "test", null, "hi");
-names.stream()
+Optional<String> first = names.stream()
     .map(Optional::ofNullable)
     .reduce(new FirstPresent<>())  // findFirst() for free
 ```
