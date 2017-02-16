@@ -71,7 +71,7 @@ I want to combine two values of the same type
 
 **Associativity (Semigroup)**
 
-It does not matter if I start from the left, middle or right side
+It does not matter if I start from the left, middle or right side, enables parallelization through partitioning
 
 **Identity element (+ all of above = Monoid)**
 
@@ -79,7 +79,7 @@ I do not need to handle empty things differently (e.g. Empty lists/optionals)
 
 **Commutativity (+ all of above = Commutative Monoid)**
 
-I do not need to sort my values
+I do not need to sort my values beforehand, enables async value generation
 
 ---
 
@@ -92,7 +92,7 @@ names.stream()
     .reduce(0, (a, b) -> a + b)
 ```
 
-Reduction = (+, Integer)
+Reduction above: Monoid<+, Integer>
 
 * **Associativity**: 1 + (2 + 3) = (1 + 2) + 3
 * **Identity**: 0
@@ -131,7 +131,7 @@ T reduce(Monoid<T> monoid)
 ```java
 interface Monoid<T> {
     T identity();
-    T sum (T a, T b);
+    T combine(T a, T b);
 }
 ```
 
@@ -140,7 +140,7 @@ class Sum implements Monoid<Integer> {
     Integer identity() {
         return 0;
     }
-    Integer sum (Integer a, Integer b) {
+    Integer combine(Integer a, Integer b) {
         return a + b;
     }
 }
@@ -148,9 +148,7 @@ class Sum implements Monoid<Integer> {
 
 ---
 
-# Parallelization
-
-We need more guarantees: Commutativity
+# Commutative Monoid
 
 ```java
 interface CommunativeMonoid<T> extends Monoid<T> {}
@@ -161,7 +159,7 @@ class Sum implements CommunativeMonoid<Integer> {
     Integer identity() {
         return 0;
     }
-    Integer sum (Integer a, Integer b) {
+    Integer combine(Integer a, Integer b) {
         return a + b;
     }
 }
@@ -169,8 +167,33 @@ class Sum implements CommunativeMonoid<Integer> {
 
 ---
 
-# Type Safety
+# Combining Optionals
 
-Any reduction in a stream needs at least a **Monoid<T>**
 
-Any reduction in parralel stream needs **CommunativeMonoid<T>**
+```java
+class FirstPresent<T> implements Monoid<Optional<T>> {
+    Optional<T> identity() {
+        return Optional.empty();
+    }
+    Optional<T> combine(Optional<T> left, Optional<T> right) {
+        if (left.isPresent()) {
+            return left;
+        } else {
+            return right;
+        }
+    }
+}
+```
+
+```java
+List<String> names = Lists.newArrayList(null, "a", "test", null, "hi");
+names.stream()
+    .map(Optional::ofNullable)
+    .reduce(new FirstPresent<>())  // findFirst() for free
+```
+
+---
+
+class: center, middle
+
+# Questions?
