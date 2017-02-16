@@ -79,7 +79,7 @@ I do not need to handle empty things differently (e.g. Empty lists/optionals)
 
 **Commutativity (+ all of above = Commutative Monoid)**
 
-I do not need to sort my values beforehand, enables async value generation
+I do not need to sort my values beforehand, enables dealing with unordered lists, e.g. because of async value generation
 
 ---
 
