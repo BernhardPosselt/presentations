@@ -92,7 +92,7 @@ names.stream()
     .reduce(0, (a, b) -> a + b)
 ```
 
-Reduction above: Monoid<+, Integer>
+Reduction above: Commutative Monoid<+, Integer>
 
 * **Associativity**: 1 + (2 + 3) = (1 + 2) + 3
 * **Identity**: 0
