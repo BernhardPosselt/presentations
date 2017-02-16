@@ -100,7 +100,7 @@ Reduction above: Commutative Monoid<+, Integer>
 
 ---
 
-# Define Reductions
+# Define Reductions Using Monoids
 
 ```java
 class Sum {
