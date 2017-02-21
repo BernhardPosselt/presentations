@@ -49,9 +49,13 @@ Integer reduce(Integer identity, BinaryOperator<Integer> accumulator)
 
 # (Some) Algebraic Structures
 
-Given an operation of form a • b in S
+Given an binary operation of form a • b in S
 
-**Associativity (Semigroup)**
+**Closure (Magma)**
+
+S is closed under operation a • b
+
+**Associativity (+ all of above = Semigroup)**
 
 For all a, b and c in S, the equation (a • b) • c = a • (b • c) holds.
 
@@ -67,7 +71,11 @@ For all a, b in A, a • b = b • a.
 
 # What the Math Stuff Really Means
 
-I want to combine two values of the same type
+Binary operation = I want to combine two values of the same type
+
+**Closure (Magma)**
+
+Output type is always equal to the input types (no null!)
 
 **Associativity (Semigroup)**
 
@@ -79,7 +87,7 @@ I do not need to handle empty things differently (e.g. Empty lists/optionals)
 
 **Commutativity (+ all of above = Commutative Monoid)**
 
-I do not need to sort my values beforehand, enables dealing with unordered lists, e.g. because of async value generation
+I do not need to sort my values beforehand, enables dealing with unordered values
 
 ---
 
