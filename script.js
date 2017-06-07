@@ -5,5 +5,5 @@ function createSlideShow(url) {
 };
 
 window.onload = function () {
-    createSlideShow('slides/algebraic.md');
+    createSlideShow('slides/functors.md');
 };
