@@ -1,18 +1,18 @@
 class: center, middle
 
-# Result Monad
+# Functor, Applicative Functor, Monad in Action: Result
 
 ---
 
-# Problem
-Dealing with errors in places where exception handling won't work or is tedious
+# Why
+Dealing with errors in places where exception handling won't work or is tedious (e.g. Streams, Methods without Exception signatures, distributed systems, languages without exceptions e.g. C, Go, Haskell, Rust)
 
 ```java
-public static Mail parseMail(String email) throws ValidationException {
-    if (!regex.matches(email)) {
-        throw new ValidationException("Not a valid E-Mail");
-    } else {
+public static Mail parseMail(String email) throws Invalid {
+    if (regex.matches(email)) {
         return new Mail(email);
+    } else {
+        throw new Invalid("Not a valid E-Mail");
     }
 }
 
@@ -31,7 +31,7 @@ List<Mail> mails = Lists.newArrayList("a@a.com", "hi").stream()
     .map(mail -> {
         try {
             return Optional.ofNullable(parseMail(mail));
-        } catch (ValidationException e) {
+        } catch (Invalid e) {
             return Optional.empty();
         }
     })
@@ -60,7 +60,7 @@ public class Result<T, E extends Throwable> {
 stream.map(mail -> {
     try {
         return new Result(parseMail(mail), null);
-    } catch (ValidationException e) {
+    } catch (Invalid e) {
         return new Result(null, e);
     }
 })
@@ -80,15 +80,15 @@ public static <A, B extends Throwable> Result<A, B> check(
     try {
         return new Result(supplier.get(), null);
     } catch (Throwable e) {
-        if (exceptionClass.isInstance(e)) {
+        if (exceptionClass.isInstance(e))
             return new Result(null, (B) e);
-        } else {
+        else
             throw new RuntimeException(e);
-        }
     }
 }
 
-mails.stream().map(mail -> Result.check(() -> parseMail(mail)));
+mails.stream()
+    .map(mail -> Result.check(() -> parseMail(mail), Invalid.class));
 ```
 
 ---
@@ -106,7 +106,7 @@ public Stream<T> stream() {
 }
 
 List<Mail> mails = Lists.newArrayList("a@a.com", "hi").stream()
-    .flatMap(mail -> Result.check(() -> parseMail(mail)).stream())
+    .flatMap(mail -> Result.check(() -> parseMail(mail), Invalid.class).stream())
     .collect(Collectors.toList())
 ```
 
@@ -149,7 +149,7 @@ public <A> Result<A, E> map(Function<? super T, ? extends A> mapFunction) {
     }
 }
 
-Result.check(() -> parseMail("test"))
+Result.check(() -> parseMail("test"), Invalid.class)
     .map(mail -> mail.getMail().length())
 ```
 
@@ -168,12 +168,12 @@ public <A> Result<A, E> flatMap(Function<? super T, Result<A, E>> mapFunction) {
     if (this.e == null) {
         return mapFunction.apply(this.value);
     } else {
-        return Result.ofError(this.e);
+        return new Result(null, this.e);
     }
 }
 
 Result.of("testmail@mail.com")
-    .flatMap(mail -> Result.check(() -> parseMail(mail)))
+    .flatMap(mail -> Result.check(() -> parseMail(mail), Invalid.class))
 ```
 
 ---
@@ -188,34 +188,57 @@ public <A> Result<A, E> applicativeMap(Result
     if (this.e == null) {
         return result.map(f -> f.apply(this.value));
     } else {
-        return Result.ofError(this.e);
+        return new Result(null, this.e);
     }
 }
 ```
 
-Why would anyone want to use this ^
+**When to use applicativeMap**: When dealing with Results of Functions. You get those when you map a function which takes two or more parameters.
 
 ---
 
 # Applicative Functor Usage: Validation
-Because **Result&lt;Function&lt;A, B&gt;&gt;** is not **Function&lt;A, B&gt;** which is expected by **map** so partially applied results are impossible
 
 ```java
 public class User {
     public User(String username, String email)
 }
 
-Result<User, Err> createUser = Result.of(name -> (mail -> new User(name, mail)))
+Function<...> toUser = name -> (mail -> new User(name, mail));
+Result<String, Err> id = Result.check(() -> parseName(userId), Invalid.class)
+Result<String, Err> mail = Result.check(() -> parseMail(email), Invalid.class)
 
-Result<String, Err> id = Result.check(() -> parseUserId(userId))
-Result<String, Err> mail = Result.check(() -> parseMail(email))
-
-// arguments reversed and nested!
-Result<User, Err> validUser = mail.applicativeMap(id.applicativeMap(createUser));
+Result<User, Err> validUser = mail.applicativeMap(id.map(toUser));
 ```
 
-Haskell uses infix functions to avoid nesting and ordering issues:
+Haskell uses infix functions to avoid ugly nesting:
 
 ```haskell
-createUser <$> parseUserId id <*> parseMail email
+toUser <$> parseName id <*> parseMail email
+```
+
+---
+
+# Excursion: Haskell
+
+```haskell
+module Main where
+
+import Text.Regex.PCRE
+
+data User = User {
+    mail :: String,
+    id :: String
+} deriving (Show)
+
+parse :: String -> String -> Either String String
+parse regex value = if value =~ regex
+    then Right value
+    else Left $ "Could not parse " ++ value ++ " with regex " ++ regex
+
+toUser mail userId = User <$> (parse ".*@.*" mail) <*> (parse "[a-z]" userId)
+
+main :: IO ()
+main = do
+    putStrLn $ show $ toUser "test@test.com" "user"
 ```
