@@ -198,6 +198,7 @@ Why would anyone want to use this ^
 ---
 
 # Applicative Functor Usage: Validation
+Because **Result&lt;Function&lt;A, B&gt;&gt;** is not **Function&lt;A, B&gt;** which is expected by **map** so partially applied results are impossible
 
 ```java
 public class User {
