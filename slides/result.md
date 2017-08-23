@@ -99,9 +99,9 @@ mails.stream()
 ```java
 public Stream<T> stream() {
     if (this.e == null) {
-        return Stream.empty();
-    } else {
         return Stream.of(this.value);
+    } else {
+        return Stream.empty();
     }
 }
 
