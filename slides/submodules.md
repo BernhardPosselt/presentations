@@ -99,9 +99,10 @@ Sets the submodule to its current tracking commit. If you did not commit a track
 
 # Working With Submodules
 
-If you do not touch a submodule you do not have to deal with it (except when pulling updates)
+If you do not touch a submodule:
+* Make sure to always run **git submodule update** after pulling
+* Make sure to not revert a tracking commit because you forgot to run **git submodule update**
 
 If you touch a submodule:
 * Commit and push the changes and branches as usual
 * Commit and push the tracking commit in the parent repo
-* People pulling the changes need to run **git submodule update** after they pull changes in the affected branch
