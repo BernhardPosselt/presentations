@@ -211,3 +211,4 @@ obj.<String, void>method(value -> {
 * Tail recursion
 * Ruby/Smalltalk/Groovy like blocks: list.filter { it == 0}
 * Declaration site variance in addition to use site variance
+* No checked exceptions (is this a bonus?)
