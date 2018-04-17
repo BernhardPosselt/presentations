@@ -212,4 +212,5 @@ obj.<String, void>method(value -> {
 * Ruby/Smalltalk/Groovy like blocks: list.filter { it == 0}
 * Declaration site variance in addition to use site variance
 * Actual functions
+* Type aliases
 * No checked exceptions (is this a bonus?)
