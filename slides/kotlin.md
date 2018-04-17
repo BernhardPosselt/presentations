@@ -12,7 +12,7 @@ class: center, middle
 * Supported by Google as official Android programming language
 * Designed with Java interoperability in mind
 * Integrates well with Java frameworks such as Spring
-* Releases Independently from JVM (compatible with JDK6)
+* Releases independent from JVM (compatible with JDK6+)
 
 ---
 
