@@ -1,7 +1,6 @@
 function createSlideShow(url) {
     return remark.create({
         sourceUrl: url,
-        highlightStyle: 'solarized-dark'
     });
 };
 

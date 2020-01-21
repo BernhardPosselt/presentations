@@ -4,11 +4,19 @@ class: center, middle
 
 ---
 
-# Setup
+# What You Will Learn In This Talk
 
-Vagrant runs on local machine over ssh by default
+* Quickly Spin up Linux VMs locally
+* Describe your desired server state in yaml
+* Automatically deploy that state onto 1..n Linux servers
+* Split up, parameterise and re-use state descriptions
+* Built-In features: users, applications, files, configuration, etc
 
-    brew install ansible
+---
+
+# Set Up Linux VM
+
+Vagrant is a quick way to spin up and configure a local Linux VM via Virtual Box.
 
 Spin up a local VM:
 
@@ -37,20 +45,27 @@ ssh vagrant
 
 ---
 
-# Running a Simple Test
+# Hello World Ansible
+```sh
+brew install ansible
+```
 
-Specify your hosts in an inventory file called **acceptance.yml** with the following contents:
+Specify your hosts in an inventory file called **hosts.yml** with the following contents:
 
 ```yaml
 all:
   hosts:
-    vagrant
+    children:
+      acceptance:
+        vagrant
+      production:
+        production.com
 ```
 
 Now you can run your ssh commands via:
 
 ```sh
-ansible all -i acceptance.yml -m ping
+ansible all -i hosts.yml -m ping
 ```
 
 ---
