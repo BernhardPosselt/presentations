@@ -1,6 +1,7 @@
 function createSlideShow(url) {
     return remark.create({
-        sourceUrl: url
+        sourceUrl: url,
+        highlightStyle: 'solarized-dark'
     });
 };
 
@@ -16,5 +17,5 @@ function getSlide(key) {
 }
 
 window.onload = function () {
-    createSlideShow('slides/' + getSlide('slide') + '.md');
+    createSlideShow('slides/' + getSlide('slides') + '.md');
 };
