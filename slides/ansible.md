@@ -14,6 +14,20 @@ class: center, middle
 
 ---
 
+# Ansible
+
+Tool that let's you define your server **state** in YAML. 
+
+State is written down in **playbooks** which include a list of **tasks** or **roles** (grouped tasks).
+
+YAML files are templated with jinja2 (Python templating library).
+
+Environment (e.g. dev/prod/acct) is configured in **inventory** files (yaml/ini).
+
+Ansible connects via SSH to your server and runs all tasks to sync the state. You can also use an Ansible service on your machine to make it faster.
+
+---
+
 # Set Up Linux VM
 
 Vagrant is a quick way to spin up and configure a local Linux VM via Virtual Box.
@@ -160,3 +174,56 @@ Let's re-use the variables in **setup-server.yml**:
 ---
 
 # Roles
+
+Grouping playbook tasks and files. Edit **server-setup.yml**:
+
+```yaml
+---
+- hosts: servers
+  roles:
+    - users
+``` 
+
+Could also include roles like: 
+* **commerce**
+* **hippo_dxp_bloomreach_xp**
+* **locationservice**
+
+---
+
+# Roles Structure
+
+Let's create the following folder hierarchy:
+
+```sh
+mkdir -p roles/users/tasks
+```
+
+Directory a role directory includes:
+
+* **tasks**
+* **handlers**: events listeners: if web server restart is sent, execute systemctl restart httpd.service
+* **defaults**
+* **vars**
+* **files**
+* **templates**
+* **meta**
+
+# User Role
+
+Now fill the **roles/users/tasks/main.yml** file with the following contents:
+
+```yaml
+- name: create default users
+  become: yes
+  user:
+    name: "{{ item.login }}"
+    shell: /bin/bash
+  loop: "{{ shell_users }}"        
+- name: provision ssh keys
+  become: yes
+  authorized_key:
+    user: "{{ item.login }}"
+    key: "{{ lookup('file', '~/.ssh/' + item.ssh_key) }}"
+  loop: "{{ shell_users }}"
+```
