@@ -11,7 +11,7 @@ function getSlide(key) {
     if (result && result[1] && decodeURIComponent(result[1])) {
         return decodeURIComponent(result[1]);
     } else {
-        return 'monoids';
+        return 'ansible';
     }
 }
 

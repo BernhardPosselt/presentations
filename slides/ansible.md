@@ -50,27 +50,112 @@ ssh vagrant
 brew install ansible
 ```
 
-Specify your hosts in an inventory file called **hosts.yml** with the following contents:
+Specify your hosts in an inventory file called **acceptance.yml** with the following contents:
 
 ```yaml
 all:
-  hosts:
-    children:
-      acceptance:
+  children:
+    servers:
+      hosts:
         vagrant
-      production:
-        production.com
 ```
 
 Now you can run your ssh commands via:
 
 ```sh
-ansible all -i hosts.yml -m ping
+ansible servers -i acceptance.yml -m ping
+ansible all --list-hosts -i acceptance.yml
 ```
 
 ---
 
-# Playbooks
+# Scripts AKA Playbooks
+
+Let's create some users. Create a file called **setup-server.yml**:
+
+
+```yaml
+---
+- hosts: servers
+  tasks:
+    - name: create default users
+      become: yes
+      user:
+        name: bep
+        shell: /bin/bash
+    - name: provision ssh keys
+      become: yes
+      authorized_key:
+        user: bep
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+```
+
+```sh
+ansible-playbook -i acceptance.yml setup-server.yml
+ssh bep@vagrant -i ~/.ssh/id_rsa
+```
+
+---
+
+# Per Host Variables (1/2)
+
+What if we have different users on acceptance and production? Edit **acceptance.yml**:
+
+
+```yaml
+all:
+  children:
+    servers:
+      hosts:
+        vagrant:
+          shell_users: 
+            - {login: "bep", ssh_key: "id_rsa.pub"}
+```
+
+---
+
+# Per Host Variables (2/2)
+
+Let's re-use the variables in **setup-server.yml**:
+
+
+```yaml
+---
+- hosts: servers
+  tasks:
+    - name: create default users
+      become: yes
+      user:
+        name: "{{ item.login }}"
+        shell: /bin/bash
+      loop: "{{ shell_users }}"        
+    - name: provision ssh keys
+      become: yes
+      authorized_key:
+        user: "{{ item.login }}"
+        key: "{{ lookup('file', '~/.ssh/' + item.ssh_key) }}"
+      loop: "{{ shell_users }}"
+```
+
+---
+
+# Modules
+
+* Re-usable [scripts](https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html):
+  * [lineinfile](https://docs.ansible.com/ansible/latest/modules/lineinfile_module.html#lineinfile-module)
+  * [template](https://docs.ansible.com/ansible/latest/modules/template_module.html#template-module)
+  * [replace](https://docs.ansible.com/ansible/latest/modules/replace_module.html#replace-module)
+  * [shell](https://docs.ansible.com/ansible/latest/modules/shell_module.html#shell-module)
+  * [copy](https://docs.ansible.com/ansible/latest/modules/copy_module.html#copy-module)
+  * [systemd](https://docs.ansible.com/ansible/latest/modules/systemd_module.html#systemd-module)
+  * [docker](https://docs.ansible.com/ansible/latest/modules/list_of_cloud_modules.html#docker)
+  * [get_url](https://docs.ansible.com/ansible/latest/modules/get_url_module.html)
+  * etc
+---
+
+# Ansible Galaxy
+
+[Community modules](https://galaxy.ansible.com/) which you can [install locally](https://docs.ansible.com/ansible/latest/galaxy/user_guide.html#the-command-line-tool) for a playbook or globally for all playbooks
 
 ---
 
