@@ -10,7 +10,7 @@ class: center, middle
 * Describe your desired server state in yaml
 * Automatically deploy that state onto 1..n Linux servers
 * Split up, parameterise and re-use state descriptions
-* Built-In features: users, applications, files, configuration, etc
+* Built-In features: users, files, configuration, etc
 
 ---
 
@@ -28,9 +28,9 @@ Ansible connects via SSH to your server and runs all tasks to sync the state. Yo
 
 ---
 
-# Spin Up Local Linux VM
+# Spin Up a Local Linux VM
 
-Vagrant is a quick way to spin up and configure a local Linux VM via Virtual Box.
+[Vagrant](https://www.vagrantup.com/) is a quick way to spin up and configure a local Linux VM via Virtual Box.
 
 Spin up a local VM:
 
