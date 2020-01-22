@@ -28,14 +28,14 @@ Ansible connects via SSH to your server and runs all tasks to sync the state. Yo
 
 ---
 
-# Set Up Linux VM
+# Spin Up Local Linux VM
 
 Vagrant is a quick way to spin up and configure a local Linux VM via Virtual Box.
 
 Spin up a local VM:
 
 ```sh
-brew cask install vagrant
+brew cask install vagrant virtualbox
 mkdir ansible-example && cd ansible-example
 vagrant init debian/buster64
 vagrant up
