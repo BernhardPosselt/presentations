@@ -209,6 +209,8 @@ Directory a role directory includes:
 * **templates**
 * **meta**
 
+---
+
 # User Role
 
 Now fill the **roles/users/tasks/main.yml** file with the following contents:
