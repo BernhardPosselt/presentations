@@ -16,7 +16,7 @@ class: center, middle
 
 # Ansible
 
-Tool that let's you define your server **state** in YAML. 
+Tool that let's you define your server **state** in YAML.
 
 State is written down in **playbooks** which include a list of **tasks** or **roles** (grouped tasks).
 
@@ -25,6 +25,8 @@ YAML files are templated with jinja2 (Python templating library).
 Environment (e.g. dev/prod/acct) is configured in **inventory** files (yaml/ini).
 
 Ansible connects via SSH to your server and runs all tasks to sync the state. You can also use an Ansible service on your machine to make it faster.
+
+Ansible runs are idempotent: running it multiple times **shouldn't** change the outcome
 
 ---
 
@@ -69,7 +71,7 @@ Specify your hosts in an inventory file called **acceptance.yml** with the follo
 ```yaml
 all:
   children:
-    servers:
+    webservers:
       hosts:
         vagrant
 ```
@@ -77,7 +79,7 @@ all:
 Now you can run your ssh commands via:
 
 ```sh
-ansible servers -i acceptance.yml -m ping
+ansible webservers -i acceptance.yml -m ping
 ansible all --list-hosts -i acceptance.yml
 ```
 
@@ -90,7 +92,7 @@ Let's create some users. Create a file called **setup-server.yml**:
 
 ```yaml
 ---
-- hosts: servers
+- hosts: webservers
   tasks:
     - name: create default users
       become: yes
@@ -119,10 +121,10 @@ What if we have different users on acceptance and production? Edit **acceptance.
 ```yaml
 all:
   children:
-    servers:
+    webservers:
       hosts:
         vagrant:
-          shell_users: 
+          shell_users:
             - {login: "bep", ssh_key: "id_rsa.pub"}
 ```
 
@@ -135,7 +137,7 @@ Let's re-use the variables in **setup-server.yml**:
 
 ```yaml
 ---
-- hosts: servers
+- hosts: webservers
   tasks:
     - name: create default users
       become: yes
@@ -179,12 +181,12 @@ Grouping playbook tasks and files. Edit **server-setup.yml**:
 
 ```yaml
 ---
-- hosts: servers
+- hosts: webservers
   roles:
     - users
-``` 
+```
 
-Could also include roles like: 
+Could also include roles like:
 * **commerce**
 * **hippo_dxp_bloomreach_xp**
 * **locationservice**
@@ -229,3 +231,96 @@ Now fill the **roles/users/tasks/main.yml** file with the following contents:
     key: "{{ lookup('file', '~/.ssh/' + item.ssh_key) }}"
   loop: "{{ shell_users }}"
 ```
+
+---
+
+# Sensitive Data (Passwords, Tokens)
+
+[Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html) let's you check in password encrypted files and strings into Git.
+
+Create a file called **password.txt** in your home directory that only has the password in it. Example password here is **potato**.
+
+**Do not commit that file into Git repos!**
+
+Copy this file onto the machine that runs your Ansible playbooks!
+
+---
+
+# Creating Encrypted Variables
+
+```sh
+ansible-vault encrypt_string --vault-password-file ~/password.txt 'mypassword' \
+  --name 'dbpassword'
+```
+
+spits out this which you can re-use in your inventory files:
+
+```yaml
+dbpassword: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          38646361363764333435643838356437663538643764356139336364353630636537393539343061
+          3635313161643564633534626236376464393262343334360a383865326663343333313836336436
+          63626264663938633564363835633563633435633736333064363962306562386538333465363032
+          6461653831613536640a363037643439666530623062313438376666306238663639323233393435
+          3739
+```
+
+---
+
+
+# Creating Encrypted Variables Example
+
+Edit the appropriate inventory file to include it like this:
+
+```yaml
+all:
+  children:
+    servers:
+      hosts:
+        vagrant:
+          shell_users:
+            - {login: "bep", ssh_key: "id_rsa.pub"}
+          dbpassword: !vault |
+            $ANSIBLE_VAULT;1.1;AES256
+            38646361363764333435643838356437663538643764356139336364353630636537393539343061
+            3635313161643564633534626236376464393262343334360a383865326663343333313836336436
+            63626264663938633564363835633563633435633736333064363962306562386538333465363032
+            6461653831613536640a363037643439666530623062313438376666306238663639323233393435
+            3739
+```
+
+---
+
+
+# Reading Encrypted Variables
+
+Use the following command to decrypt specific variables
+
+```sh
+ansible servers -i acceptance.yml -m debug -a 'var=dbpassword' \
+  --vault-password-file ~/password.txt
+```
+
+---
+
+# Creating Encrypted Files
+
+Use the following command to create an encrypted file. Ansible will use your default editor to edit the file.
+
+```sh
+ansible-vault create --vault-password-file ~/password.txt secret.yml
+```
+
+You can decrypt the file but you should prefer using editing since it takes care of re-encrypting the file automatically:
+
+```sh
+ansible-vault edit --vault-password-file ~/password.txt secret.yml
+```
+
+
+---
+
+# Your Job
+
+* Set up a web server (apache/NGinx/node/etc) that serves a web page
+* Test page locally via **vagrant ssh** or set up [port forwarding through Vagrant](https://www.vagrantup.com/docs/networking/forwarded_ports.html#defining-a-forwarded-port)
