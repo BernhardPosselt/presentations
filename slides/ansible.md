@@ -297,7 +297,7 @@ all:
 Use the following command to decrypt specific variables
 
 ```sh
-ansible servers -i acceptance.yml -m debug -a 'var=dbpassword' \
+ansible webservers -i acceptance.yml -m debug -a 'var=dbpassword' \
   --vault-password-file ~/password.txt
 ```
 
