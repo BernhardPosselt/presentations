@@ -227,6 +227,8 @@ await browser.wait(EC.stalenessOf(loadingButton));
 
 # How to Create and Reset Test Data
 
+Selenium libraries are available for many languages, so it does not matter where you run the test suite from. 
+
 * Run your tests either from the backend so that you can use database transactions
 * Connect to your database in your test suite and reset the relevant data
 * Use an API client to create/delete data
