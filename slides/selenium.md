@@ -8,6 +8,7 @@ class: center, middle
 
 * How to write tests using Protractor (small API layer on top of WebDriver)
 * What to watch out for when writing tests
+* How to create and reset test data
 * Frontend testing patterns
 
 ---
@@ -96,7 +97,7 @@ const remote = require('../../../node_modules/selenium-webdriver/remote');
 browser.setFileDetector(new remote.FileDetector());
 const path = require('path');
 const filePath = path.resolve(__dirname, `../../assets/${assetPath}`);
-const formControl = element(by.css('input[type="file"]'));
+const input = element(by.css('input[type="file"]'));
 await input.sendKeys(filePath);
 ```
 
@@ -120,6 +121,8 @@ it('should find an element by text input model', async () => {
     await expect(name.getText()).toEqual('Jane Doe');
 });
 ```
+
+---
 
 # Solutions: Waits
 
@@ -223,5 +226,7 @@ Solutions:
 * Use an API client to create/delete data
 
 ---
+
+# Patterns: Page Objects
 
 # Questions?
