@@ -183,6 +183,8 @@ Return types depend on your [abstraction layer](https://www.protractortest.org/#
 
 # Solutions: Abstracting Form Access
 
+Biggest offenders: [browser native time and date inputs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time)
+
 ```ts
 export async function setTime(
     locator: ElementFinder,
@@ -190,7 +192,6 @@ export async function setTime(
 ): Promise<void> {
     await scrollToElement(locator);
 
-    // chrome date input has AM and PM and ignores colons
     if (value !== null && value !== undefined && isChrome) {
         let result = value?.replace(':', '');
         if (/^(0|10|11)/.test(result)) {
@@ -199,13 +200,9 @@ export async function setTime(
             result += 'PM';
         }
         await locator.sendKeys(result);
-    } else {
-        await locator.sendKeys(value);
     }
 }
 ```
-
-Biggest offenders: [browser native time and date inputs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time)
 
 ---
 
