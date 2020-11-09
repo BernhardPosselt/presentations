@@ -267,8 +267,6 @@ class LoginPage {
         await setTextValue('username', user.login);
         await setTextValue('password', user.password);
         await submitForm();
-
-        // wait for redirect after login
         await browser.wait(EC.not(
             EC.or(
                 EC.urlIs(`${baseUrl}/login`),
@@ -284,11 +282,10 @@ class LoginPage {
 # Patterns: Page Objects (2/2)
 
 ```js
-it('administrators should have the ' + 
-   'cooperative list page as home page', async () => {
+it('admin should have the cooperative list page as home page', async () => {
     await loginPage.navigate();
     await loginPage.login({
-        user: 'test', 
+        user: 'admin', 
         password: 'password',
     });
     
@@ -297,6 +294,6 @@ it('administrators should have the ' +
 });
 ```
 
-
+---
 
 # Questions?
