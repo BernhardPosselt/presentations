@@ -6,7 +6,7 @@ class: center, middle
 
 # What You Will Learn In This Talk
 
-* All important APIs
+* How to write tests using Protractor (small API layer on top of WebDriver)
 * What to watch out for when writing tests
 * Frontend testing patterns
 
@@ -46,3 +46,23 @@ it('should find an element by text input model', async () => {
 ![](https://www.protractortest.org/img/components.png)
 
 ---
+
+# What Can Go Wrong
+
+```js
+it('should find an element by text input model', async () => {
+    // js app not initialized or finished loading
+    await browser.get('/some/url');
+    
+    const username = element(by.css('.username'));
+    // element not visible or interactable
+    await username.clear();
+    // different browser input implementations
+    await username.sendKeys('Jane Doe');
+    
+    const name = element(by.binding('username'));
+    // js framework state not synced yet
+    await expect(name.getText()).toEqual('Jane Doe');
+
+});
+```
