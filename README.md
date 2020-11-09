@@ -8,6 +8,7 @@ Slides are available by appending **?slides=File** for rendering **File.md**
 
 ## All Presentations
 
+* [Selenium](https://bernhardposselt.github.io/presentations/?slides=selenium)
 * [Ansible](https://bernhardposselt.github.io/presentations/?slides=ansible)
 * [Functors](https://bernhardposselt.github.io/presentations/?slides=functors)
 * [Kotlin](https://bernhardposselt.github.io/presentations/?slides=kotlin)
