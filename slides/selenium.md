@@ -225,21 +225,58 @@ await browser.wait(EC.stalenessOf(loadingButton));
 
 ---
 
-# Fixtures
+# How to Create and Reset Test Data
 
-Your local app needs to add and reset test data
-
-Solutions: 
 * Run your tests either from the backend so that you can use database transactions
 * Connect to your database in your test suite and reset the relevant data
 * Use an API client to create/delete data
 
 ---
 
-# Patterns: Page Objects
+# Patterns: Page Objects (1/2)
 
 Goal: [Separation between test logic and presentation](https://www.selenium.dev/documentation/en/guidelines_and_recommendations/page_object_models/)
 
+```ts
+class LoginPage {
+    async navigate(): Promise<void> {
+        await browser.get("/login")
+    }
+    
+    async login(user: {login: string, password: string}): Promise<void> {
+        await setTextValue('username', user.login);
+        await setTextValue('password', user.password);
+        await submitForm();
+
+        // wait for redirect after login
+        await browser.wait(EC.not(
+            EC.or(
+                EC.urlIs(`${baseUrl}/login`),
+                EC.urlIs(`${baseUrl}`)
+            ),
+        ));
+    }
+}
+```
+
 ---
+
+# Patterns: Page Objects (2/2)
+
+```js
+it('administrators should have the ' + 
+   'cooperative list page as home page', async () => {
+    await loginPage.navigate();
+    await loginPage.login({
+        user: 'test', 
+        password: 'password',
+    });
+    
+    await expect(cooperativeListPage.isActive())
+        .toBe(true)
+});
+```
+
+
 
 # Questions?
