@@ -296,4 +296,6 @@ it('admin should have the cooperative list page as home page', async () => {
 
 ---
 
+class: center, middle
+
 # Questions?
