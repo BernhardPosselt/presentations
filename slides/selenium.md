@@ -52,6 +52,56 @@ it('should find an element by text input model', async () => {
 
 ---
 
+# Using Locators
+
+Depends on your [abstraction layer](https://www.protractortest.org/#/api?view=ProtractorBy)
+
+```ts
+await element(by.tagName('form')).submit();
+
+await element.all(by.tagName('form'))
+    .each(async (element) => await element.submit())
+```
+
+Accessing attributes and methods depends on your [abstraction layer](https://www.protractortest.org/#/api?view=ElementFinder)
+
+---
+
+# Using Drag and Drop
+
+```ts
+const from = element(by.css('.draggable'));
+const to = element(by.css('.droppable'));
+await browser.actions()
+    .dragAndDrop(from, to)
+    .mouseUp()
+    .perform();
+
+await browser.actions()
+    .mouseMove(from)
+    .mouseDown()
+    .mouseMove({x: 150, y: 150})
+    .mouseUp()
+    .perform();
+```
+
+---
+
+# Using File Inputs
+
+Path to imported file may vary
+
+```ts
+const remote = require('../../../node_modules/selenium-webdriver/remote');
+browser.setFileDetector(new remote.FileDetector());
+const path = require('path');
+const filePath = path.resolve(__dirname, `../../assets/${assetPath}`);
+const formControl = element(by.css('input[type="file"]'));
+await input.sendKeys(filePath);
+```
+
+---
+
 # What Can Go Wrong
 
 ```js
