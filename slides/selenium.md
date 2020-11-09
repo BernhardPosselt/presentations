@@ -15,6 +15,8 @@ class: center, middle
 
 # Rough Idea (The Cake is a Lie)
 
+Race conditions and issues on almost every single line!
+
 ```js
 it('should find an element by text input model', async () => {
     await browser.get('/some/url');
@@ -31,28 +33,34 @@ it('should find an element by text input model', async () => {
 
 ---
 
-# How Does Selenium Work
+# Bare Minimum Frontend Testing
+
+Library + Browser Driver = 😑 
 
 * Browser Drivers implement the [WebDriver Protocol](https://w3c.github.io/webdriver/) (REST + JSON) and know how to automate the browser
 * Language bindings for the WebDriver API are usually maintained under the Selenium umbrella
 
 ---
 
-# Utilities
+# Utilities Take Care of the Heavy Lifting
+
+Library + Utilities + Browser Driver = 😍
 
 * Selenium Server is an optional proxy to launch and automate the drivers remote or locally
 * WebDriverManager handles downloading and installing all relevant executables and browser drivers and itself offers an API to launch the selenium server
-* Your test suite (Protractor/WebdriverIO/Nightwatch/etc) is usually a wrapper on top of the Selenium language bindings and your favorite test suite tool (e.g. Jasmine) 
+* Your test runner (Protractor/WebdriverIO/Nightwatch/etc) is usually a wrapper on top of the Selenium language bindings and your favorite test suite tool (e.g. Jasmine) 
 
 ---
 
-# Example: Protractor
+# Test Runner Example: Protractor
+
+Comes with built in Angular support and utilities
 
 ![](https://www.protractortest.org/img/components.png)
 
 ---
 
-# Using Locators
+# API: Using Locators
 
 Depends on your [abstraction layer](https://www.protractortest.org/#/api?view=ProtractorBy)
 
@@ -67,7 +75,7 @@ Accessing attributes and methods depends on your [abstraction layer](https://www
 
 ---
 
-# Using Drag and Drop
+# API: Using Drag and Drop
 
 ```ts
 const from = element(by.css('.draggable'));
@@ -87,7 +95,7 @@ await browser.actions()
 
 ---
 
-# Using File Inputs
+# API: Using File Inputs
 
 Path to imported file may vary
 
@@ -98,6 +106,19 @@ const path = require('path');
 const filePath = path.resolve(__dirname, `../../assets/${assetPath}`);
 const input = element(by.css('input[type="file"]'));
 await input.sendKeys(filePath);
+```
+
+---
+
+# API: The Browser 
+
+E.g. Resizing, screenshots, cookies: depends on your [abstraction](https://www.protractortest.org/#/api?view=ProtractorBrowser) [layer](https://www.selenium.dev/documentation/en/webdriver/browser_manipulation/)
+
+```ts
+await browser.driver
+    .manage()
+    .window()
+    .setSize(1280, 1280);
 ```
 
 ---
@@ -115,7 +136,7 @@ it('should find an element by text input model', async () => {
     // different browser input implementations
     await username.sendKeys('Jane Doe');
     
-    const name = element(by.binding('username'));
+    const name = element(by.css('.username'));
     // js framework state not synced yet
     await expect(name.getText()).toEqual('Jane Doe');
 });
@@ -123,7 +144,7 @@ it('should find an element by text input model', async () => {
 
 ---
 
-# Solutions: Waits
+# Solutions: Waiting
 
 ```ts
 export function urlRegex(regex: RegExp): () => Promise<boolean> {
