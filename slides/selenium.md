@@ -26,7 +26,6 @@ it('should find an element by text input model', async () => {
     const name = element(by.binding('username'));
     
     await expect(name.getText()).toEqual('Jane Doe');
-
 });
 ```
 
@@ -140,6 +139,8 @@ await browser.wait(urlRegex(/test$/))
 
 More shortcuts are [usually provided by your abstraction layer](https://www.protractortest.org/#/api?view=ProtractorExpectedConditions)
 
+---
+
 # Solutions: Executing Scripts
 
 ```ts
@@ -156,6 +157,8 @@ export async function scrollToElement(
 ```
 
 Return types depend on your [abstraction layer](https://www.protractortest.org/#/api?view=webdriver.WebDriver.prototype.executeScript)
+
+---
 
 # Solutions: Abstracting Form Access
 
@@ -183,6 +186,8 @@ export async function setTime(
 
 Biggest offenders: [browser native time and date inputs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time)
 
+---
+
 # Solutions: Waiting for JS Frameworks (1/2)
 
 ```ts
@@ -200,6 +205,8 @@ export function appIsReady(): () => Promise<boolean> {
 await browser.wait(appIsReady())
 ```
 
+---
+
 # Solutions: Waiting for JS Frameworks (2/2)
 
 ```html
@@ -216,6 +223,8 @@ await browser.wait(EC.presenceOf(loadingButton));
 await browser.wait(EC.stalenessOf(loadingButton));
 ```
 
+---
+
 # Fixtures
 
 Your local app needs to add and reset test data
@@ -228,5 +237,9 @@ Solutions:
 ---
 
 # Patterns: Page Objects
+
+Goal: [Separation between test logic and presentation](https://www.selenium.dev/documentation/en/guidelines_and_recommendations/page_object_models/)
+
+---
 
 # Questions?
