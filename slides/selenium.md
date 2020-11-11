@@ -138,6 +138,7 @@ it('should find an element by text input model', async () => {
     
     const name = element(by.css('.username'));
     // js framework state not synced yet
+    // element not in view and text not rendered
     await expect(name.getText()).toEqual('Jane Doe');
 });
 ```
