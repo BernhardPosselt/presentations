@@ -178,11 +178,12 @@ function createContainer() {
     container.register('app', () => {
         const app = express();
         app.get('/route', container.resolve('handler'));
+        return app;
     })
     return container;
 }
 // in index.js
-createContainer().resolve('app')();
+createContainer().resolve('app');
 ```
 
 ---
