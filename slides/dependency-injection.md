@@ -84,7 +84,7 @@ class DbService {
 
 ---
 
-# Solution: Passing in State (Methods or Functions)
+# Solution: Passing in State (Methods/Functions)
 ```ts
 class DynamoClient {
 }
