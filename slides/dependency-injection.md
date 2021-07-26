@@ -7,7 +7,7 @@ class: center, middle
 # Why
 
 * Pattern to get rid of **global** state
-* Impedes testing:
+* Global state impedes testing:
   * Production code needs to know about test setup
   * Mocking is too broad
   * Need to deal with rollbacks
