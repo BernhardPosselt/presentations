@@ -213,10 +213,10 @@ test('create a project', async () => {
 
 ```ts
 class Container<T extends string> {
-    private blueprints: Map<T, () => any> = new Map();
-    private singletons: Map<T, any> = new Map();
+    private blueprints: Map<T, () => unknown> = new Map();
+    private singletons: Map<T, unknown> = new Map();
     
-    public register(key: T, blueprint: () => any) {
+    public register(key: T, blueprint: () => unknown) {
         this.blueprints.set(key, blueprint);
     }
 }
@@ -228,8 +228,8 @@ class Container<T extends string> {
 
 ```ts
 class Container<T extends string> {
-    private blueprints: Map<T, () => any> = new Map();
-    private singletons: Map<T, any> = new Map();
+    private blueprints: Map<T, () => unknown> = new Map();
+    private singletons: Map<T, unknown> = new Map();
     
     public resolve<V>(key: T): V {
         if (this.singletons.has(key)) {
