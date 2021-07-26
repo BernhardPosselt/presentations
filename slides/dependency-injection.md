@@ -66,7 +66,7 @@ AWS.config.update({
 
 ---
 
-# Solution: Passing in State (Constructor)
+# Passing in State: Constructor
 
 ```ts
 class DynamoClient {
@@ -84,7 +84,7 @@ class DbService {
 
 ---
 
-# Solution: Passing in State (Methods/Functions)
+# Passing in State: Methods/Functions
 ```ts
 class DynamoClient {
 }
@@ -102,7 +102,7 @@ function save(db: DynamoClient, value: object) {
 
 ---
 
-# Solution: Passing in State (Partial Appl.)
+# Passing in State: Partial Application
 
 * Nothing more than  a function constructor
 
@@ -121,9 +121,9 @@ save(new DynamoClient())({user: 'test'});
 
 ---
 
-# Solution: Passing in State (Explicit Mgmt.)
+# Passing in State: Explicit State Management
 
-* Reversed Partial Application
+* Kinda reversed Partial Application
 * Often used in Functional Programming in conjunction with the [Reader Monad](https://www.youtube.com/watch?v=AkOFubm-9L8)
 * Not that great to use, in general good to avoid
 
