@@ -259,7 +259,7 @@ export class Service {}
 export class AppModule {}
 ```
 
-* **Inversify**: Same as angular but no compiler, so you need to manually add all injectables:
+* **Inversify**: Bit more boilerplate than Angular:
 
 ```ts
 @injectable()
