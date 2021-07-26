@@ -278,7 +278,7 @@ container.resolve(Ninja)
 * Otherwise, needs separate behavior using a proxy:
 
 ```ts
-const bProxy: B = new LazySingleton();
+const bProxy: B = new InjectionProxy();
 const a = new A(bProxy);
 const b = new B(a);
 bProxy.setImplementation(a);
