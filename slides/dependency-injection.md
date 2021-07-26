@@ -91,12 +91,12 @@ class DynamoClient {
 
 class DbService {
   save(db: DynamoClient, value: object) {
-      this.db.save(object);
+      db.save(object);
   }
 }
 
 function save(db: DynamoClient, value: object) {
-  this.db.save(object);
+  db.save(object);
 }
 ```
 
@@ -112,7 +112,7 @@ class DynamoClient {
 
 function save(db: DynamoClient) {
     return function(value: object) {
-      this.db.save(object);
+      db.save(object);
     }
 }
 
@@ -133,7 +133,7 @@ class DynamoClient {
 
 function save(value: object) {
     return function(db: DynamoClient) {
-      this.db.save(object);
+      db.save(object);
     }
 }
 
