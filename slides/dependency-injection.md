@@ -156,7 +156,7 @@ function bootstrap(config: {...}) {
     
     const app = express();
     
-    app.get('/route', () => db.save());
+    app.get('/route', (request, response) => db.save(request.body));
     
     return app;
 }
