@@ -212,11 +212,11 @@ test('create a project', async () => {
 * Container needs to hold a map of blueprints
 
 ```ts
-class Container<T extends string> {
-    private blueprints: Map<T, () => unknown> = new Map();
-    private singletons: Map<T, unknown> = new Map();
+class Container<K> {
+    private blueprints: Map<K, () => unknown> = new Map();
+    private singletons: Map<K, unknown> = new Map();
     
-    public register(key: T, blueprint: () => unknown) {
+    public register(key: K, blueprint: () => unknown) {
         this.blueprints.set(key, blueprint);
     }
 }
@@ -227,11 +227,11 @@ class Container<T extends string> {
 # Container Internals: Resolving
 
 ```ts
-class Container<T extends string> {
-    private blueprints: Map<T, () => unknown> = new Map();
-    private singletons: Map<T, unknown> = new Map();
+class Container<K> {
+    private blueprints: Map<K, () => unknown> = new Map();
+    private singletons: Map<K, unknown> = new Map();
     
-    public resolve<V>(key: T): V {
+    public resolve<V>(key: K): V {
         if (this.singletons.has(key)) {
             return this.singletons.get(key);
         } else if (this.blueprints.has(key)) {
