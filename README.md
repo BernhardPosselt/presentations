@@ -8,6 +8,7 @@ Slides are available by appending **?slides=File** for rendering **File.md**
 
 ## All Presentations
 
+* [Dependency Injection](https://bernhardposselt.github.io/presentations/?slides=dependency-injection)
 * [Selenium](https://bernhardposselt.github.io/presentations/?slides=selenium)
 * [Ansible](https://bernhardposselt.github.io/presentations/?slides=ansible)
 * [Functors](https://bernhardposselt.github.io/presentations/?slides=functors)
