@@ -271,3 +271,17 @@ const container = new Container();
 container.bind<Ninja>(Ninja).toSelf().inSingletonScope();
 container.resolve(Ninja)
 ```
+
+---
+
+# Circular Dependencies
+
+* First: avoid at all costs
+* Otherwise, needs separate behavior using a proxy:
+
+```ts
+const bProxy: B = new LazySingleton();
+const a = new A(bProxy);
+const b = new B(a);
+bProxy.setImplementation(a);
+```
