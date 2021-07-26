@@ -35,7 +35,7 @@ const s3 = new AWS.S3({
 jest.mock('../../src/services/rollback-service');
 ```
 
-* Requires you to structure your files based on how you want to mock them
+* Requires you to structure your files based on how you want to mock them (1 configuration parameter per file?)
 * Requires rollbacks
 
 ```ts
