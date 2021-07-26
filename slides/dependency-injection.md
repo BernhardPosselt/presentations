@@ -207,4 +207,67 @@ test('create a project', async () => {
 
 ---
 
-# 
+# Container Internals: Registering
+
+* Container needs to hold a map of blueprints
+
+```ts
+class Container<T extends string> {
+    private blueprints: Map<T, () => any> = new Map();
+    private singletons: Map<T, any> = new Map();
+    
+    public register(key: T, blueprint: () => any) {
+        this.blueprints.set(key, blueprint);
+    }
+}
+```
+
+---
+
+# Container Internals: Resolving
+
+```ts
+class Container<T extends string> {
+    private blueprints: Map<T, () => any> = new Map();
+    private singletons: Map<T, any> = new Map();
+    
+    public resolve(key: T): any {
+        const value = this.singletons.get(key);
+        const blueprint = this.blueprints.get(key);
+        if (value === undefined && blueprint !== undefined) {
+            const instance = blueprint();
+            this.singletons.set(key, instance);
+            return instance;
+        } else if (value !== undefined) {
+            return value;
+        } else {
+            throw new Error(`Index ${key} not found`);
+        }
+    }
+}
+```
+
+---
+
+# Other Container Implementations
+
+* **Angular**: Resolve information stored on the class itself via decorators
+
+```ts
+@Injectable()
+export class Service {}
+
+@NgModule({providers: [Service]})
+export class AppModule {}
+```
+
+* **Inversify**: Same as angular but no compiler, so you need to manually add all injectables:
+
+```ts
+@injectable()
+class Ninja {}
+
+const container = new Container();
+container.bind<Ninja>(Ninja).toSelf().inSingletonScope();
+container.resolve(Ninja)
+```
