@@ -231,15 +231,13 @@ class Container<T extends string> {
     private blueprints: Map<T, () => any> = new Map();
     private singletons: Map<T, any> = new Map();
     
-    public resolve(key: T): any {
-        const value = this.singletons.get(key);
-        const blueprint = this.blueprints.get(key);
-        if (value === undefined && blueprint !== undefined) {
-            const instance = blueprint();
+    public resolve<V>(key: T): V {
+        if (this.singletons.has(key)) {
+            return this.singletons.get(key);
+        } else if (this.blueprints.has(key)) {
+            const instance = this.blueprints.get(key)();
             this.singletons.set(key, instance);
-            return instance;
-        } else if (value !== undefined) {
-            return value;
+            return instance as V;
         } else {
             throw new Error(`Index ${key} not found`);
         }
