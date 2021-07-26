@@ -9,7 +9,7 @@ class: center, middle
 * Pattern to get rid of **global** state
 * Global state impedes testing:
   * Production code needs to know about test setup
-  * Mocking is too broad
+  * Mocking is too fiddly
   * Need to deal with rollbacks
   
 ---
@@ -27,7 +27,7 @@ const s3 = new AWS.S3({
 
 ---
 
-# Module System Mocks
+# Fiddly Mocking
 
 * Replace a file when importing it:
 
@@ -43,6 +43,8 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 ```
+
+* Same goes for things like [fetch mock](https://www.npmjs.com/package/fetch-mock)
 
 ---
 
