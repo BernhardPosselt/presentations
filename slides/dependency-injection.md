@@ -44,7 +44,7 @@ afterEach(() => {
 });
 ```
 
-* Same goes for things like [fetch mock](https://www.npmjs.com/package/fetch-mock)
+* Global mocks like [fetch mock](https://www.npmjs.com/package/fetch-mock) require very low level mocking
 
 ---
 
