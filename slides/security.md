@@ -280,7 +280,7 @@ var element = '<input type="text" value="" /> <script>alert(\'hi\')</script><img
 * [Consult the cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) (**required**!)
 * Serve user uploaded media from a different domain to make use of browser sand-boxing
 * If user supplied HTML is needed, use an XML parser that supports whitelisting (some JS frameworks execute code based on html attribute values)
-* Escape based on usage
+* Escape based on context
 * Do not use server side rendered JS or CSS files that depend on user input
 
 ---
