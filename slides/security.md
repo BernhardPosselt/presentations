@@ -52,6 +52,8 @@ Cheat sheets available at [OWASP](https://cheatsheetseries.owasp.org/index.html)
 * LDAP Injection
 * etc
 
+---
+
 ### Example: Shell Injection Vulnerability
 
 ```java
@@ -67,6 +69,7 @@ var fileName = "/a/valid/file;rm -rf /";
 Runtime.getRuntime().exec("cat /a/valid/file; rm -rf /");
 ```
 
+---
 
 ### Injection Prevention
 
@@ -92,8 +95,10 @@ var content = new String(Files.readAllBytes(Paths.get(fileName)));
 ```java
 var fileName = "../../../etc/passwd"
 // translates to
-var content = new String(Files.readAllBytes(Paths.get(../../../etc/passwd)));
+var content = new String(Files.readAllBytes(Paths.get("../../../etc/passwd")));
 ```
+---
+
 
 ### Path Enumeration Attack
 
@@ -102,13 +107,14 @@ var content = new String(Files.readAllBytes(Paths.get(../../../etc/passwd)));
 ```java
 var fileName = "../../../etc/guessedFile"
 // translates to
-var content = new String(Files.readAllBytes(Paths.get(../../../etc/guessedFile)));
+var content = new String(Files.readAllBytes(Paths.get("../../../etc/guessedFile")));
 ```
 
 ---
 
 ### File Referencing Prevention
 
+* Check the [writeup](https://owasp.org/www-community/attacks/Path_Traversal)
 * If a file can be requested by user input, lock it down to one folder
 * Check if the **absolute** evaluated path points to the locked down folder (otherwise ../ shenanigans can ensue)
 * If applicable do not expose if a file exists
@@ -168,7 +174,7 @@ validDomains.stream()
 
 ---
 
-### Cache Poisoning Vulnerability
+## Cache Poisoning Vulnerability
 
 ```java
 var domain = getHostHeader();
@@ -186,10 +192,11 @@ var domain = "myattackdomain.com";
 updateCacheOnChange(domain);
 ```
 
-----
+---
 
 ### Cache Poisoning Prevention
 
+* Check the [write up](https://owasp.org/www-community/attacks/Cache_Poisoning)
 * Depends on your cache setup
 * Ideally create cache per logged-in user or avoid creating it with user provided parameters such as HTTP headers
 
@@ -224,11 +231,11 @@ Let's try some fishing emails which use the following link
 
 ---
 
-### Clickjacking Attack
+### Clickjacking Vulnerability
 
 Invisible IFrame + CSS magic which redirects clicks to target website
 
-[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/3mk0RySeNsU/0.jpg)](http://www.youtube.com/watch?v=3mk0RySeNsU)
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/Pdc5KJfOQpI/0.jpg)](https://www.youtube.com/watch?v=Pdc5KJfOQpI)
 
 ---
 
@@ -274,7 +281,7 @@ var element = '<input type="text" value="" /> <script>alert(\'hi\')</script><img
 * Serve user uploaded media from a different domain to make use of browser sand-boxing
 * If user supplied HTML is needed, use an XML parser that supports whitelisting (some JS frameworks execute code based on html attribute values)
 * Escape based on usage
-* Do not use server side rendered JS or CSS that depend on user input
+* Do not use server side rendered JS or CSS files that depend on user input
 
 ---
 
