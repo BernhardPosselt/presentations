@@ -16,3 +16,4 @@ Slides are available by appending **?slides=File** for rendering **File.md**
 * [Monoids](https://bernhardposselt.github.io/presentations/?slides=monoids)
 * [Result](https://bernhardposselt.github.io/presentations/?slides=result)
 * [Submodules](https://bernhardposselt.github.io/presentations/?slides=submodules)
+* [Software Dev Security](https://bernhardposselt.github.io/presentations/?slides=security)
