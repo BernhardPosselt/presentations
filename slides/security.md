@@ -1,3 +1,5 @@
+class: center, middle
+
 # Web-Security
 
 --
