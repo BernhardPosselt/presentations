@@ -540,3 +540,7 @@ String hashedPassword = BCrypt.hashpw(password, global_salt + salt);
 ```
 
 ---
+
+### Insecure Dependencies
+
+You are going to use dependencies and you need to monitor them for security vulnerabilities. That's it.
