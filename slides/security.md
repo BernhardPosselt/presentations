@@ -2,7 +2,7 @@ class: center, middle
 
 # Web-Security
 
---
+---
 
 ## OWASP TOP 10 2017
 
@@ -17,7 +17,7 @@ class: center, middle
 9. Using Known Vulnerable Components
 10. Insufficient Logging & Monitoring
 
---
+---
 
 ## What Will Be Covered
 
@@ -37,13 +37,13 @@ class: center, middle
 * Password Hashing
 * Insecure Dependencies
 
---
+---
 
 ## General Resources
 
 Cheat sheets available at [OWASP](https://cheatsheetseries.owasp.org/index.html)
 
---
+---
 
 ## Injection Vulnerabilities
 
@@ -58,7 +58,7 @@ Cheat sheets available at [OWASP](https://cheatsheetseries.owasp.org/index.html)
 Runtime.getRuntime().exec("ls " +  fileName);
 ```
 
---
+---
 
 ### Shell Injection Attack
 ```java
@@ -78,7 +78,7 @@ Runtime.getRuntime().exec("cat /a/valid/file; rm -rf /");
 * Beware of combinations (e.g. LDAP commands via shell)! 
 * [Cheat Sheet available](https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html)
 
---
+---
 
 ## File Referencing Vulnerabilities
 
@@ -86,7 +86,7 @@ Runtime.getRuntime().exec("cat /a/valid/file; rm -rf /");
 var content = new String(Files.readAllBytes(Paths.get(fileName)));
 ```
 
---
+---
 
 ### Directory Traversal Attack
 ```java
@@ -105,7 +105,7 @@ var fileName = "../../../etc/guessedFile"
 var content = new String(Files.readAllBytes(Paths.get(../../../etc/guessedFile)));
 ```
 
---
+---
 
 ### File Referencing Prevention
 
@@ -113,7 +113,7 @@ var content = new String(Files.readAllBytes(Paths.get(../../../etc/guessedFile))
 * Check if the **absolute** evaluated path points to the locked down folder (otherwise ../ shenanigans can ensue)
 * If applicable do not expose if a file exists
 
---
+---
 
 ## Host Header Poisoning Vulnerability
 ```java
@@ -125,7 +125,7 @@ public void resetPasswordEmail(HttpServletRequest request, @RequestParam("email"
 }
 ```
 
---
+---
 
 ### Host Header Poisoning Attack
 
@@ -151,7 +151,7 @@ Host: valid-domain.com
 X-Forwarded-Host: myattackdomain.com
 ```
 
---
+---
 
 ### Host Header Poisoning Prevention
 * Do not use the host header to construct URLs
@@ -166,7 +166,7 @@ validDomains.stream()
   .orThrow(new HttpForbiddenException());
 ```
 
---
+---
 
 ### Cache Poisoning Vulnerability
 
@@ -175,7 +175,7 @@ var domain = getHostHeader();
 updateCacheOnChange(domain);
 ```
 
---
+---
 
 ### Cache Poisoning Vulnerability
 
@@ -186,7 +186,7 @@ var domain = "myattackdomain.com";
 updateCacheOnChange(domain);
 ```
 
----
+----
 
 ### Cache Poisoning Prevention
 
@@ -194,7 +194,7 @@ updateCacheOnChange(domain);
 * Ideally create cache per logged-in user or avoid creating it with user provided parameters such as HTTP headers
 
 
---
+---
 
 ## Unvalidated Redirects Vulnerability
 
@@ -205,7 +205,7 @@ public void redirectTo(@RequestParam("url") String toUrl) {
 }
 ```
 
---
+---
 
 ### Unvalidated Redirects Attack
 
@@ -215,14 +215,14 @@ Let's try some fishing emails which use the following link
 <a href="legit.bank.com/redirect?url=http://my.bank.com">Login</a>
 ```
 
---
+---
 
 ### Unvalidated Redirects Prevention
 
 * Whitelist possible redirect URLs
 * Check the [cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html) for anything more complex, the URL standard is very complex
 
---
+---
 
 ### Clickjacking Attack
 
@@ -230,14 +230,14 @@ Invisible IFrame + CSS magic which redirects clicks to target website
 
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/3mk0RySeNsU/0.jpg)](http://www.youtube.com/watch?v=3mk0RySeNsU)
 
---
+---
 
 ### Clickjacking Prevention
 
 * Set the correct HTTP headers
 * Consult the [cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html)
 
---
+---
 
 ## XSS Vulnerability
 
@@ -247,7 +247,7 @@ Similar to Injection Vulnerabilities
 var element = '<input type="text" value="' + value + '"/>';
 ```
 
---
+---
 
 ### XSS Attack
 
@@ -257,7 +257,7 @@ var value = "\" /> &lt;script&gt;alert('hi')&lt;/script&gt;<img src=\"";
 var element = '<input type="text" value="" /> <script>alert(\'hi\')</script><img src=""/>';
 ```
 
---
+---
 
 ### Lesser Known XSS Vulnerabilities
 * **href**, **src**, **style** and **&lt;style&gt;** allow javascript:alert('hi')
@@ -266,7 +266,7 @@ var element = '<input type="text" value="" /> <script>alert(\'hi\')</script><img
 * [Quirks mode](https://portswigger.net/research/detecting-and-exploiting-path-relative-stylesheet-import-prssi-vulnerabilities) allows text files to be loaded as js files
 * Since XSS is an injection vulnerability context matters: script or style tags have different escape mechanisms
 
---
+---
 
 ### XSS Prevention
 * For the love of god, try if you can add [CSP](https://developer.mozilla.org/en-US/docs/Web/Security/CSP)
@@ -276,7 +276,7 @@ var element = '<input type="text" value="" /> <script>alert(\'hi\')</script><img
 * Escape based on usage
 * Do not use server side rendered JS or CSS that depend on user input
 
---
+---
 
 ## Session Hijacking Vulnerability
 
@@ -285,7 +285,7 @@ var element = '<input type="text" value="" /> <script>alert(\'hi\')</script><img
 * No HSTS?
 * XSS all the cookies?
 
---
+---
 
 ### Session Hijacking Attack
 
@@ -299,7 +299,7 @@ If no secure cookie flag is set you can MITM the cookie
 
 If HSTS is not present the attacker can use [MITM for HTTP redirects](https://www.owasp.org/index.php/HTTP_Strict_Transport_Security#Threats)
 
---
+---
 
 ### Session Hijacking Prevention
 * Session ID should have enough entropy to prevent guessing
@@ -312,7 +312,7 @@ If HSTS is not present the attacker can use [MITM for HTTP redirects](https://ww
 * HSTS (includeSubDomains or be vulnerable to [MITM cookies from subdomains](https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html#problems))
 * HTTPS cookies
 
---
+---
 
 ## Unserialize Vulnerability
 
@@ -329,20 +329,20 @@ ObjectInputStream in = new ObjectInputStream(fileIn);
 ValueObject vo2 = (ValueObject) in.readObject();
 ```
 
---
+---
 
 ### Unserialize Attack
 * Basic idea
   * Serialization always includes the class name as well
   * We can freely choose the class name to one that does stuff on **unserialize** (some execute arbitrary code)
 
---
+---
 
 ### Unserialize Attack Prevention
 * Check the [cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html)
 * Avoid unserialization like the plague and use a proper intermediate format like JSON
 
---
+---
 
 ### File Upload Vulnerability
 
@@ -354,7 +354,7 @@ ValueObject vo2 = (ValueObject) in.readObject();
 * Chrome + IE sniffing: Chrome/IE try to find out the mimetype by parsing the file -> execute code from file.txt
 * Uploading executable files like **.htaccess** can open up more attack vectors 
 
---
+---
 
 ### File Upload Prevention
 * Use Nginx
@@ -368,7 +368,7 @@ ValueObject vo2 = (ValueObject) in.readObject();
 * Disallow SVG (JavaScript can be embedded) and HTML
 * [For all the PHP users out there](http://nullcandy.com/php-image-upload-security-how-not-to-do-it/)
 
---
+---
 
 ## XXE Vulnerability
 
@@ -378,7 +378,7 @@ DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 Document doc = dBuilder.parse(userSuppliedXml);
 ```
 
---
+---
 
 ### XXE Attack
 
@@ -389,7 +389,7 @@ Document doc = dBuilder.parse(userSuppliedXml);
  <!ENTITY xxe SYSTEM "file:///etc/passwd" >]><foo>&xxe;</foo>
 ```
 
---
+---
 
 ### XXE Prevention
 
@@ -404,7 +404,7 @@ dbf.setFeature(FEATURE, false);
 ```
 
 * While you're at it, read about the [many other ways](https://cheatsheetseries.owasp.org/cheatsheets/XML_Security_Cheat_Sheet.html) how XML can be used to take down or exploit your servers!
---
+---
 
 ### CSRF Vulnerability
 ```java
@@ -415,7 +415,7 @@ public void deleteUser(@RequestParam("user") String user) {
   }
 }
 ```
---
+---
 
 ### CSRF Attack
 
@@ -432,7 +432,7 @@ Attack via hidden form, include it on a page the user surfs to, e.g. google ads 
 
 You can extend that to all AJAX requests as well if you fuck up your CORS configuration!
 
---
+---
 
 ### CSRF Prevention
 
@@ -450,7 +450,7 @@ You can extend that to all AJAX requests as well if you fuck up your CORS config
 
 Beware of [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Access-Control-Allow-Credentials) with credentials enabled or CSRF all of your API!
 
---
+---
 
 
 ## SSRF Vulnerability
@@ -481,14 +481,14 @@ public void resetPasswordEmail(@RequestParam("user") String user, @RequestParam(
 }
 ```
 
---
+---
 
 ### Timing Attack
 
 * Send arbitrary strings and measure how fast they complete
 * Since equals aborts at the first character mismatch, correct guesses take longer
 
---
+---
 
 ### Timing Attack Prevention
 **Constant time string compare algorithms!**
@@ -501,7 +501,7 @@ if (constantEquals(user, "John") && constantEquals(pass, "Passw0rd")) {
 }
 ```
 
---
+---
 
 ### Timing Attack Special: BEAST
 
@@ -518,13 +518,13 @@ String password = "mypass";
 String hashedPassword = hash(password);
 ```
 
---
+---
 
 ### Password Hashing Attack
 
 Rainbow Tables
 
---
+---
 
 ### Passwort Hashing Attack Prevention
 
@@ -539,4 +539,4 @@ String salt = BCrypt.gensalt();  // saved in database with each user
 String hashedPassword = BCrypt.hashpw(password, global_salt + salt);
 ```
 
---
+---
