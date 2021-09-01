@@ -1,6 +1,3 @@
-title: Web-Security
-theme: sjaakvandenberg/cleaver-light
---
 # Web-Security
 
 --
