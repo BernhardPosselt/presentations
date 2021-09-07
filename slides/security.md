@@ -353,7 +353,7 @@ ValueObject vo2 = (ValueObject) in.readObject();
 
 ### File Upload Vulnerability
 
-* Apache feature: [Double Extensions](https://www.acunetix.com/websitesecurity/upload-forms-threat/) ❀(*´◡`*)❀
+* Apache feature: [Double Extensions](https://www.acunetix.com/websitesecurity/upload-forms-threat/)
 
 > Files can have more than one extension, and the order of the extensions is normally irrelevant. For example, if the file welcome.html.fr maps onto content type text/html and language French then the file welcome.fr.html will map onto exactly the same information. If more than one extension is given which maps onto the same type of meta-information, then the one to the right will be used, except for languages and content encodings. For example, if .gif maps to the MIME-type image/gif and .html maps to the MIME-type text/html, then the file welcome.gif.html will be associated with the MIME-type text/html.
  
