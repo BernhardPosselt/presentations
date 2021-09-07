@@ -411,6 +411,7 @@ dbf.setFeature(FEATURE, false);
 ```
 
 * While you're at it, read about the [many other ways](https://cheatsheetseries.owasp.org/cheatsheets/XML_Security_Cheat_Sheet.html) how XML can be used to take down or exploit your servers!
+
 ---
 
 ### CSRF Vulnerability
@@ -466,6 +467,8 @@ Beware of [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_contro
 var result = httpClient.get(userProvidedUrl)
 ```
 
+---
+
 ### SSRF Attack
 
 ```java
@@ -473,10 +476,14 @@ var userProvidedUrl = "https://any-server-in-your-dmz/somethingevil"
 var result = httpClient.get(userProvidedUrl)
 ```
 
+---
+
 ### SSRF Prevention
 
 * Whitelist HTTP calls if user provided
 * Consult the [cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html)
+
+---
 
 ## Timing Attack Vulnerabilities
 ```java
