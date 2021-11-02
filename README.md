@@ -10,6 +10,7 @@ Slides are available by appending **?slides=File** for rendering **File.md**
 
 * [Dependency Injection](https://bernhardposselt.github.io/presentations/?slides=dependency-injection)
 * [Selenium](https://bernhardposselt.github.io/presentations/?slides=selenium)
+* [Cypress](https://bernhardposselt.github.io/presentations/?slides=cypress)
 * [Ansible](https://bernhardposselt.github.io/presentations/?slides=ansible)
 * [Functors](https://bernhardposselt.github.io/presentations/?slides=functors)
 * [Kotlin](https://bernhardposselt.github.io/presentations/?slides=kotlin)
