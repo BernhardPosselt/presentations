@@ -114,6 +114,7 @@ cy.get('.content')
 # Assertions
 
 * Make the command chain retry-able 
+* "Waits"
 * Stringly typed using Mocha like assertions or via callbacks
 * Luckily covered by TypeScript string enum overloads
 
@@ -191,6 +192,26 @@ cy.get('button').click()
     const contents = $('div .greeting').text();
     expect(contents).to.eq('Hello');  
   })
+```
+
+---
+
+# Quiz: Can You Spot the Bugs
+
+```ts
+cy.get('element')
+    .should('be.visible')
+```
+
+```ts
+cy.visit('/')
+cy.get('.next-button').click(); // loads next page
+cy.get('.next-button').click(); // loads next page
+```
+
+```ts
+cy.get('.open-calendar').click();
+cy.get('.christmas').click();
 ```
 
 ---
