@@ -206,6 +206,29 @@ cy.get('button').click()
 
 ---
 
+# Fixtures
+
+* Used to mock [backend requests](https://docs.cypress.io/guides/guides/network-requests#Fixtures)
+* Useful in environments where the backend is too hard to set up
+
+Place file **activities.json into **cypress/fixtures/activities.json**
+
+```ts
+cy.intercept('GET', '/activities/*', { fixture: 'activities.json' })
+cy.intercept('/search*', [{ item: 'Book 1' }, { item: 'Book 2' }])
+```
+
+```ts
+cy.intercept('GET', '/activities/*', { fixture: 'activities.json' })
+    .as('label')
+cy.wait('@label')
+    .then(response => {
+        // etc
+    })
+```
+
+---
+
 # Common Things
 
 * File Upload: [cypress-file-upload](https://www.npmjs.com/package/cypress-file-upload) MIT licensed
