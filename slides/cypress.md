@@ -115,7 +115,7 @@ cy.get('.content')
 
 * Make the command chain retry-able 
 * "Waits"
-* Stringly typed using Mocha like assertions or via callbacks
+* Stringly-Typed using Mocha like assertions or via callbacks
 * Luckily covered by TypeScript string enum overloads
 
 ```ts
@@ -124,9 +124,26 @@ cy.get('.action-email')
 
 // equivalent:
 cy.get('.action-email')
-        .should((elem) => {
-            expect(elem.val()).to.eq('fake@email.com')
+        .should(($elem) => {
+            expect($elem.val()).to.eq('fake@email.com')
         })
+```
+
+---
+
+# If Everything Is Retried, How Do I Test If Something Exists?
+
+* Get a base element that is sure to exist
+* Go off that one using jQuery
+* Wrap element back in Cypress to get the Cypress API + retry-ability
+
+```ts
+cy.get('base-container')
+    .then($elem => {
+        if ($elem.length > 0) {
+            cy.wrap($elem).click();
+        }
+    })
 ```
 
 ---
@@ -192,6 +209,23 @@ cy.get('button').click()
     const contents = $('div .greeting').text();
     expect(contents).to.eq('Hello');  
   })
+```
+
+---
+
+# Common Things
+
+* File Upload: [cypress-file-upload](https://www.npmjs.com/package/cypress-file-upload) MIT licensed
+
+```ts
+cy.get('[data-cy="file-input"]')
+  .attachFile('myfixture.json');
+```
+
+* Drag and Drop: [cypress-drag-drop](https://www.npmjs.com/package/@4tw/cypress-drag-drop) GPL licensed, doesn't work with every framework
+
+```ts
+cy.get('.sourceitem').drag('.targetitem')
 ```
 
 ---
