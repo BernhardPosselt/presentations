@@ -102,13 +102,6 @@ cy.get('.action-email')  // command
   .type('fake@email.com').should('have.value', 'fake@email.com') // command
 ```
 
-Following code has a bug:
-
-```ts
-cy.get('.content')
-  .find('.header').should('contain', 'hi');
-```
-
 ---
 
 # Assertions
@@ -246,6 +239,11 @@ cy.get('.next-button').click(); // loads next page
 ```ts
 cy.get('.open-calendar').click();
 cy.get('.christmas').click();
+```
+
+```ts
+cy.get('.content')
+  .find('.header').should('contain', 'hi');
 ```
 
 ---
