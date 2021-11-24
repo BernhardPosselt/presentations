@@ -17,28 +17,12 @@ class: center, middle
 # The Pitch - Why Choose Cypress
 
 * Fast, easy and **reliable** testing for anything that runs in a browser
+* Runs inside a browser/Electron using the Chrome DevTools API and Node on the backend instead of using the web driver API
 * Retries on failure until a timeout is reached
 * All in one tool: GUI, recording, debugging
 * Stepping through browser states when debugging
 * Great logging
 * Very popular right now and has commercial support and additional paid features
-
----
-
-# How It Compares to the Competition
-
-**Selenium**:
-* You call a REST API to a browser automation server
-* Low level API that allows you to interact with the DOM
-* Runs on the backend with JS being passed as strings to execute on the frontend
-* Support for every popular browser support
-* Async
-
-**Cypress**: 
-* Runs inside a browser/Electron using the Chrome DevTools API and Node on the backend
-* No explicit waits or scrolling
-* Sync? Kinda?
-* Built in Retry-ability
 
 ---
 
@@ -72,10 +56,8 @@ describe('My First Test', () => {
 
     cy.contains('type').click()
 
-    // Should be on a new URL which includes '/commands/actions'
     cy.url().should('include', '/commands/actions')
 
-    // Get an input, type into it and verify that the value has been updated
     cy.get('.action-email')
             .type('fake@email.com')
             .should('have.value', 'fake@email.com')
@@ -88,7 +70,7 @@ describe('My First Test', () => {
 # Commands
 
 * Only the last failing command chain is retried (there are exceptions)
-* You need to know which methods are commands
+* You need to know which methods are commands and which are retried
 
 ```ts
 cy.visit('https://example.cypress.io')  // command
@@ -106,7 +88,7 @@ cy.get('.action-email')  // command
 
 # Assertions
 
-* Make the command chain retry-able 
+* Additional things that are tacked onto retryable commands and force retries
 * "Waits"
 * Stringly-Typed using Mocha like assertions or via callbacks
 * Luckily covered by TypeScript string enum overloads
@@ -144,7 +126,7 @@ cy.get('base-container')
 # Asynchronicity
 
 * Async code does not work well with Cypress
-* Can only be executed on the Node backend using the tasks API:
+* Can kinda only be executed on the Node backend using the tasks API:
 
 ```ts
 // definitions:
@@ -168,10 +150,10 @@ cy.task('resetDatabase');
 * In order to retry commands, Cypress keeps an internal list of things that it should execute
  
 ```ts
-cy.visit('https://example.cypress.io')  // pushed into command array
+cy.visit('https://example.cypress.io')  // pushed into commands array
 
-cy.contains('type')  // pushed into command array
-  .click() // pushed into command array
+cy.contains('type')  // pushed into commands array
+  .click() // pushed into commands array
 ```
 
 * Test will not execute until it actually reaches the very end, meaning the following code will fail spectacularly
@@ -184,12 +166,12 @@ expect(contents).to.eq('Hello');
 
 ---
 
-# Custom "Promise" API
+# Custom "Promise" like API
 
 * Not compatible with JS promises (e.g. no Promise.all())
 
 ```ts
-cy.get('button').click()  // this execute after the following 2 lines!
+cy.get('button').click()
 const contents = $('div .greeting').text();
 expect(contents).to.eq('Hello');
 ```
@@ -260,7 +242,7 @@ cy.get('.next-button').click(); // loads next page
 ```
 
 ```ts
-cy.get('.open-calendar').click();
+cy.get('.open-calendar').click(); // opens date picker
 cy.get('.christmas').click();
 ```
 
