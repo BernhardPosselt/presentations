@@ -176,7 +176,7 @@ external fun v4(): String
 * Different ways to integrate APIs (e.g. methods to allocate/deallocate memory for C based APIs)
 * WASM is only usable from JS context but might change with [WASI](https://wasi.dev/interfaces)/[WASM components](https://component-model.bytecodealliance.org/design/why-component-model.html)
 * iOS APIs (Swift/Objective C) available out of the box
-* Everything else a massive pain (as usual)
+* [Native a massive pain](https://kotlinlang.org/docs/native-c-interop.html#pass-pointers-to-bindings) (as usual)
 
 ---
 
