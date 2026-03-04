@@ -14,7 +14,7 @@
 
 ## Jetpack Compose
 
-* Cross-Platform UI Framework similar to Flutter but uses native APIs
+* [Cross-Platform UI Framework](https://kotlinlang.org/compose-multiplatform/) similar to Flutter but uses native APIs
 * Android UI framework that can be used on Desktop and Web
 * Web platform uses WASM with JS bindings and uses canvas to render (Compose HTML uses JS and HTML instead)
 
@@ -22,12 +22,13 @@
 
 ## Official Multiplatform Libraries
 
+Libraries use Code Generation rather than Reflection (problematic: bundle size)
+
 * Date & Time
 * Serialization
 * HTTP Clients
 * I/O
 * JSON Schema Generation
-* Libraries use Code Generation rather than Reflection (problematic: bundle size)
 
 ---
 
