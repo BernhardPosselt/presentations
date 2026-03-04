@@ -59,7 +59,6 @@ kotlin {
         binaries.executable() // create a js file
     }
 }
-
 // Main.kt
 suspend fun main() {
     window.alert("hi")
@@ -80,6 +79,10 @@ suspend fun main() {
 * JS API Promises use **.await()** to turn them into suspending functions
 * Issue: you can easily forget to call await (in JS and Kotlin alike)
 * Solution: write wrappers to turn them into suspend functions (many defined in Kotlin wrappers already)
+
+---
+
+## Promise Wrappers
 
 ```kt
 import web.abort.AbortController
@@ -152,8 +155,6 @@ kotlin {
 }
 ```
 
-todo: consuming npm libraries, installing npm, coroutine electron comparison
-
 ---
 
 ## Using JS From Kotlin
@@ -169,8 +170,20 @@ external fun v4(): String
 
 ---
 
-### Other Platforms
+## Other Platforms
 
 * Different ways to integrate APIs (e.g. methods to allocate/deallocate memory for C based APIs)
 * iOS APIs (Swift/Objective C) available out of the box
 * Everything else a massive pain (as usual)
+
+---
+
+## Comparison to Electron/Flutter
+
+* Multiplatform is not a Runtime
+* Compose Desktop uses Native APIs
+* Flutter ships a custom renderer
+
+--- 
+
+## Demo
