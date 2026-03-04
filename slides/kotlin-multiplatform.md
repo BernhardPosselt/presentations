@@ -4,11 +4,10 @@
 
 ## Targets
 
-Compile Kotlin to (and interop from)
+[Compile Kotlin to (and interop from)](https://kotlinlang.org/docs/native-target-support.html) 
 
-* Android (native/JVM)
-* iOS (native)
-* JVM (Desktop & Server on JVM or ARM/X86)
+* Native ARM/X86_64
+* JVM
 * Web (JS & WASM)
 
 ---
