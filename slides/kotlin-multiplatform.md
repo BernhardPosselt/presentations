@@ -28,6 +28,7 @@ Compile Kotlin to (and interop from)
 * HTTP Clients
 * I/O
 * JSON Schema Generation
+* Libraries use Code Generation rather than Reflection (problematic: bundle size)
 
 ---
 
