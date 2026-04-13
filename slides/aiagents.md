@@ -66,6 +66,7 @@ suspend fun main() {
 
 ## Giving a Helping Hand: Tools (MCP)
 
+* Tools = Structured "Skills"
 * Used to give the AI agent a list of well-defined callbacks that they can execute on the host, including passing in parameters from the LLM
 * Can implement anything starting from reading files to requiring user interaction
 * Can cut down on context size by providing a filtered answer
