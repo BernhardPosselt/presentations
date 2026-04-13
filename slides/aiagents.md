@@ -1,6 +1,13 @@
 class: center, middle
 
-# Agentic AI with Kotlin
+# Agentic AI with Kotlin & Java
+
+---
+
+## Contents
+
+* How we can integrate LLMs using code
+* Examples in Koog, but we'll touch Spring AI as well
 
 ---
 
