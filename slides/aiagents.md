@@ -14,11 +14,12 @@ class: center, middle
 
 ---
 
-## Complementing AI Agents
+## Why do we need Code?
 
 * **Oversight**: checkpoints where human intervention is required
 * **Correctness**: custom code that can be used by the model to trigger code
-* If required, can be pulled out of an AI Agent workflow 
+* **Access to Data**: maybe we need access to stored data  
+* **Reuse**: if required, can be pulled out of an AI Agent workflow
 
 ---
 
@@ -180,7 +181,7 @@ val flow = strategy<String, String>("Sends and Receives Message") {
 
 ---
 
-## Registering and Triggering Flows
+## Registering and Triggering Strategies
 
 ```kt
 val agent = AIAgent<String, String>(
@@ -244,6 +245,25 @@ public sealed interface Message {
 
 ---
 
+## Automatic Mapping using an LLM
+
+```kt
+@Serializable
+@LLMDescription("Holds username and description")
+data class User(
+    @property:LLMDescription("User Name") val userName: String,
+    @property:LLMDescription("Description") val description: String,
+)
+
+val getUserNode by nodeLLMRequestStructured<User>(
+    name = "parse-user-node",
+    fixingParser = StructureFixingParser(
+        model = OpenAIModels.Chat.GPT4o,
+        retries = 3
+    )
+)
+```
+---
 ## Additional Features
 
 * **Long and Short Term Memory**: Load previous conversations by session id or from a predefined location
@@ -257,4 +277,6 @@ public sealed interface Message {
 
 ## Excursion: Spring AI
 
-* 
+* [Creating Prompts](https://docs.spring.io/spring-ai/reference/api/prompt.html#_example_usage)
+* [Converting Responses](https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html#_native_structured_output) 
+* [Creating Tools](https://docs.spring.io/spring-ai/reference/api/tools.html#_requiredoptional) 
