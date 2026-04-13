@@ -57,11 +57,10 @@ suspend fun main() {
 
 ---
 
-## Giving a Helping Hand: Tools
+## Giving a Helping Hand: Tools (MCP)
 
-* Used to give the AI agent a callback that they can execute
+* Used to give the AI agent a list of well-defined callbacks that they can execute on the host, including passing in parameters from the LLM
 * Can implement anything starting from reading files to requiring user interaction
-* Can receive parameters from the AI agent through annotations
 * Can cut down on context size by providing a filtered answer
 * Can query web services such as Google Maps or execute web requests using Selenium
 * Bunch of predefined tools like asking users or reading/writing to files
@@ -268,7 +267,6 @@ val getUserNode by nodeLLMRequestStructured<User>(
 
 * **Long and Short Term Memory**: Load previous conversations by session id or from a predefined location
 * **Tracing & Logging**: Custom hooks to log LLM responses and requests
-* **State Restore**: Restore state from a node from a previous execution
 * **Spring Boot Integration**: Configure in application.yml, inject **PromptExecutor**
 * **Spring AI Integration**: Can work with Spring AI models
 * **Java API**
