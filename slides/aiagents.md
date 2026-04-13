@@ -1,31 +1,30 @@
 class: center, middle
 
-# Assisted AI Agent Workflows
+# Agentic AI with Kotlin
 
 ---
 
-## AI-Based Flows
+## When to Use
 
-* Does not guarantee correctness
-* Asking a magic 8-Ball
-* Requires oversight and guidance in all steps
-* Great when incorrect results are not an issue and the only requirement is getting good enough results that would be difficult to specify in code
+* Non labeled training data based on heuristics
+* Dealing with language instead of numbers
+* Making use of generative AI
+* Fine with incorrectness as long as correct results outweigh incorrect ones
 * Think virus scanners using heuristics to determine if a file is a virus rather than checksums: high rate of false positives but likely to also detect unknown threats
 
 ---
 
 ## Complementing AI Agents
 
-* 100% autonomous AI is not yet possible
 * **Oversight**: checkpoints where human intervention is required
 * **Correctness**: custom code that can be used by the model to trigger code
-* **Benefit**: If required, can be pulled out of an AI Agent workflow 
+* If required, can be pulled out of an AI Agent workflow 
 
 ---
 
 ## Building Workflows Using Kotlin & Koog
 
-Pull in the koog library in a new Kotlin & Gradle project and configure an API key, e.g. through an env variable. Many popular cloud service can be used, but also local LLM instances like Ollama
+Pull in the **koog** library in a new Kotlin & Gradle project and configure an API key, e.g. through an env variable. Many popular cloud service can be used, but also local LLM instances like Ollama
 
 ```sh
 export GOOGLE_AI_API_KEY=your-api-key
@@ -64,7 +63,7 @@ suspend fun main() {
 * Can receive parameters from the AI agent through annotations
 * Can cut down on context size by providing a filtered answer
 * Can query web services such as Google Maps or execute web requests using Selenium
-* Buch of predefined tools like asking users or reading/writing to files
+* Bunch of predefined tools like asking users or reading/writing to files
 
 ---
 
@@ -88,7 +87,8 @@ val wineCard = listOf(
 ```kt
 class WineCardTool : ToolSet {
     @Tool
-    @LLMDescription("Holds all available wines that can be offered to the customer")
+    @LLMDescription("Holds all available wines that can " +
+            "be offered to the customer")
     fun fetchWineList(): String {
         return markdown {
             h1("Wine Card")
@@ -120,8 +120,10 @@ suspend fun main() {
         },
     )
 
-    print(agent.run("Waiter, what is the best wine that you can recommend me from your winecard"))
-    // From our wine card, I would recommend the Chateau Huit, with 4 stars from the year 2003. It is an excellent choice.
+    print(agent.run("Waiter, what is the best wine that " +
+            "you can recommend me from your winecard"))
+    // From our wine card, I would recommend the Chateau Huit, with 4 stars from 
+    // the year 2003. It is an excellent choice.
 }
 ```
 
@@ -129,12 +131,13 @@ suspend fun main() {
 
 ## Tool Parameters
 
-We can also let the LLM pass parameters to the tool itself, but we need to explain the parameters using annotations
+We can also let the LLM pass parameters to the tool itself, but we need to explain the parameters using annotations. These annotations can also go onto classes passed as parameters.
 
 ```kt
 class WineCardTool : ToolSet {
     @Tool
-    @LLMDescription("Holds all available wines that can be offered to the customer")
+    @LLMDescription("Holds all available wines that can " +
+            "be offered to the customer")
     fun fetchWineList(
         @LLMDescription("The year in which the wine was harvested")
         year: Int
@@ -146,7 +149,7 @@ class WineCardTool : ToolSet {
 
 ---
 
-## Flows
+## Strategies
 
 * You can define AI agent flows using Strategies
 * Each Strategy defines input and output types (both String, String here)
@@ -154,7 +157,7 @@ class WineCardTool : ToolSet {
 
 ---
 
-## Simple Flow
+## Simple Strategies
 
 * **onAssistantMessage { true }** evaluates to
 
@@ -166,10 +169,10 @@ onCondition { it is Message.Assistant } transformed {
 
 ```kt
 val flow = strategy<String, String>("Sends and Receives Message") {
-    val nodeSendInput by nodeLLMRequest()
+    val sendLlmMessage by nodeLLMRequest()
 
-    edge(nodeStart forwardTo nodeSendInput)
-    edge(nodeSendInput forwardTo nodeFinish onAssistantMessage { true })
+    edge(nodeStart forwardTo sendLlmMessage)
+    edge(sendLlmMessage forwardTo nodeFinish onAssistantMessage { true })
 }
 ```
 
@@ -182,7 +185,7 @@ val flow = strategy<String, String>("Sends and Receives Message") {
 ```kt
 val agent = AIAgent<String, String>(
     promptExecutor = simpleGoogleAIExecutor(System.getenv("GOOGLE_AI_API_KEY")),
-    systemPrompt = "You are a waiter at a Michelin starred restaurant",
+    systemPrompt = "Tell the model how to behave",
     llmModel = GoogleModels.Gemini2_5Flash,
     strategy = flow,
 )
@@ -191,35 +194,45 @@ val result = agent.run("String passed to nodeStart node")
 
 ---
 
-## A More Complex Flow
-
----
-
 ## Custom Nodes 
 
----
-
-## File Uploads
-
-* Working with structured input/output is more complex and needs to be done using prompts
-* Files can be retrieved from the response looking at response.parts instead of response.content
+Custom Nodes can be defined by the node function
 
 ```kt
-val request = prompt("id here") {
-    user {
-        +"Explain what's in the following image"
-        image("/path/to/image.jpg")
+val upperCaseNode by node<String, String>("node_name") { input ->
+    println("Processing input: $input")
+    input.uppercase() // Transform the input to uppercase
+}
+```
+
+---
+
+## Custom Nodes and Prompts
+
+```kt
+data class ImageAndDescription(val image: ByteArray, val description: String)
+
+val describeImgNode by node<String, ImageAndDescription>("node_name") { method ->
+    llm.writeSession {
+        appendPrompt {
+            user {
+                +"Explain what's in the following image using $method"
+                image("/path/to/image.jpg")
+            }
+        }
+        val message = requestLLMWithoutTools()
+        toImageAndDescription(message)
     }
 }
 ```
 
 ---
 
-## File Downloads
+## Mapping LLM Responses
 
 Remember **it.asAssistantMessage().content**? 
 
-Each Response has a parts property which holds all text and files: 
+Each Response has a parts property which holds all text and files. Just getting the text is implemented as a filter over text parts: 
 
 ```kt
 public sealed interface Message {
@@ -236,3 +249,12 @@ public sealed interface Message {
 * **Long and Short Term Memory**: Load previous conversations by session id or from a predefined location
 * **Tracing & Logging**: Custom hooks to log LLM responses and requests
 * **State Restore**: Restore state from a node from a previous execution
+* **Spring Boot Integration**: Configure in application.yml, inject **PromptExecutor**
+* **Spring AI Integration**: Can work with Spring AI models
+* **Java API**
+
+---
+
+## Excursion: Spring AI
+
+* 
