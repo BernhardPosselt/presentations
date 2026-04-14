@@ -161,19 +161,11 @@ class WineCardTool : ToolSet {
 
 * You can define AI agent flows using Strategies
 * Each Strategy defines input and output types (both String, String here)
-* First we define actions/nodes by using Kotlin delegates (aka interceptors for getting/setting a variable), then we connect them using edges
+* First we define actions/nodes by using [Kotlin delegates](https://kotlinlang.org/docs/delegated-properties.html) (aka interceptors for getting/setting a variable), then we connect them using edges
 
 ---
 
 ## Simple Strategies
-
-* **onAssistantMessage { true }** evaluates to
-
-```kt
-onCondition { it is Message.Assistant } transformed {
-    it.asAssistantMessage().content 
-}
-```
 
 ```kt
 val flow = strategy<String, String>("Sends and Receives Message") {
@@ -185,6 +177,15 @@ val flow = strategy<String, String>("Sends and Receives Message") {
 ```
 
 ![](../img/aiagents/simple.png)
+
+**onAssistantMessage { true }** evaluates to
+
+```kt
+onCondition { it is Message.Assistant } transformed {
+    it.asAssistantMessage().content 
+}
+```
+
 
 ---
 
@@ -281,8 +282,61 @@ val getUserNode by nodeLLMRequestStructured<User>(
 
 ---
 
-## Excursion: Spring AI
+## Short Excursion: Spring AI
 
-* [Creating Prompts](https://docs.spring.io/spring-ai/reference/api/prompt.html#_example_usage)
-* [Converting Responses](https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html#_native_structured_output) 
-* [Creating Tools](https://docs.spring.io/spring-ai/reference/api/tools.html#_requiredoptional) 
+```java
+@RestController
+class MyController {
+    private final ChatClient chatClient;
+
+    public MyController(ChatClient.Builder chatClientBuilder) {
+        this.chatClient = chatClientBuilder.build();
+    }
+
+    @GetMapping("/ai")
+    String generation(String userInput) {
+        return this.chatClient.prompt()
+            .user(userInput)
+            .call()
+            .content();
+    }
+}
+```
+---
+
+## Spring AI - Response Mapping
+
+```java
+ActorsFilms actorsFilms = ChatClient.create(chatModel).prompt()
+        .user(u -> 
+                u.text("Generate the filmography of 5 movies for {actor}.")
+                    .param("actor", "Tom Hanks"))
+        .call()
+        .entity(ActorsFilms.class);
+```
+
+---
+
+## Spring AI - Tools
+
+```java
+import java.time.LocalDateTime;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.context.i18n.LocaleContextHolder;
+
+@Component
+class DateTimeTools {
+
+    @McpTool(description = "Get the current date and time in the user's timezone")
+    String getCurrentDateTime() {
+        return LocalDateTime.now().atZone(LocaleContextHolder.getTimeZone().toZoneId()).toString();
+    }
+
+}
+
+String response = ChatClient.create(chatModel)
+        .prompt("What day is tomorrow?")
+        .tools(new DateTimeTools())
+        .call()
+        .content();
+```
