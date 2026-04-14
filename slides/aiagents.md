@@ -64,7 +64,7 @@ suspend fun main() {
 
 ---
 
-## Giving a Helping Hand: Tools (MCP)
+## Giving a Helping Hand: Tools ([MCP](https://modelcontextprotocol.io/docs/getting-started/intro))
 
 * Tools = Structured "Skills"
 * Used to give the AI agent a list of well-defined callbacks that they can execute on the host, including passing in parameters from the LLM
