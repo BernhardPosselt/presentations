@@ -272,13 +272,26 @@ val getUserNode by nodeLLMRequestStructured<User>(
 )
 ```
 ---
-## Additional Features
+## Chat Memory
+Picking up existing workflows if it was interrupted can be done by storing existing text in a DB
 
-* **Long and Short Term Memory**: Load previous conversations by session id or from a predefined location
-* **Tracing & Logging**: Custom hooks to log LLM responses and requests
-* **Spring Boot Integration**: Configure in application.yml, inject **PromptExecutor**
-* **Spring AI Integration**: Can work with Spring AI models
-* **Java API**
+```kt
+dependencies {
+    implementation("ai.koog:agents-features-memory:$koogVersion")
+}
+
+val agent = AIAgent(
+    promptExecutor = simpleOpenAIExecutor(System.getenv("OPENAI_API_KEY")),
+    llmModel = OpenAIModels.Chat.GPT4oMini
+) {
+    install(ChatMemory) {
+        chatHistoryProvider = MyDatabaseChatHistoryProvider()
+        windowSize(20)
+        filterMessages { it is Message.User || it is Message.Assistant }
+    }
+}
+
+```
 
 ---
 
@@ -340,3 +353,31 @@ String response = ChatClient.create(chatModel)
         .call()
         .content();
 ```
+
+---
+
+## Spring AI - Chat Memory
+
+Exact instance to use can be configured by adding specific dependencies and application.yml configuration
+
+```java
+ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
+
+ChatClient chatClient = ChatClient.builder(chatModel)
+    .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+    .build();
+
+String conversationId = "007";
+
+chatClient.prompt()
+    .user("Do I have license to code?")
+    .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
+        .call()
+    .content();
+```
+
+---
+
+## Spring AI
+
+[More on Spring AI](https://www.youtube.com/watch?v=NplxRLwKp34)
