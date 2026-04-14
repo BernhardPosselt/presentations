@@ -17,7 +17,6 @@ class: center, middle
 * Dealing with language instead of numbers
 * Making use of generative AI
 * Fine with incorrectness as long as correct results outweigh incorrect ones
-* Think virus scanners using heuristics to determine if a file is a virus rather than checksums: high rate of false positives but likely to also detect unknown threats
 
 ---
 
