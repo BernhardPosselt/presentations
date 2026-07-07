@@ -121,9 +121,6 @@ repositories {
     mavenCentral()
 }
 
-group = "at.fyayc"
-version = "0.0.1-SNAPSHOT"
-
 plugins {
     `kotlin-dsl`
 }
@@ -163,7 +160,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("at.fyayc:build-logic:0.0.1-SNAPSHOT")
+        classpath(":build-logic")
     }
 }
 
