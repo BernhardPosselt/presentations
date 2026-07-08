@@ -337,7 +337,7 @@ gradlePlugin {
   ) {
       val fileToUpload: RegularFileProperty = objects.fileProperty()
           .convention(projectLayout.buildDirectory.file("test.txt"))
-      val location: Property<String> = objects.property(String::class.java)
+      abstract val location: Property<String>
   }
   ```
 
