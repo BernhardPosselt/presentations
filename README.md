@@ -19,3 +19,4 @@ Slides are available by appending **?slides=File** for rendering **File.md**
 * [Submodules](https://bernhardposselt.github.io/presentations/?slides=submodules)
 * [Software Dev Security](https://bernhardposselt.github.io/presentations/?slides=security)
 * [AI Agents](https://bernhardposselt.github.io/presentations/?slides=aiagents)
+* [Gradle](https://bernhardposselt.github.io/presentations/?slides=gradle)
