@@ -557,12 +557,11 @@ fun Provider<PluginDependency>.toDependency(): String {
 ## Multi-Project Builds
 
 * What if we wanted to split up a project into several modules (e.g. atscore, atsfacades, atswebservices)
-* Gradle supports this using modules
+* Gradle supports this using Multi-Project Builds
 * Differences from Composite Builds: 
   * **include()** rather than **includeBuild()**
   * no separate **settings.gradle.kts**
   * Composite Builds are separate artifacts that can stand on their own and be released on their own (e.g. 2 different webservices)
-  * Modules 
 
 ---
 
