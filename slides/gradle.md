@@ -561,7 +561,7 @@ fun Provider<PluginDependency>.toDependency(): String {
 * Differences from Composite Builds: 
   * **include()** rather than **includeBuild()**
   * no separate **settings.gradle.kts**
-  * Composite Builds are separate artifacts that can stand on their own (e.g. 2 different webservices)
+  * Composite Builds are separate artifacts that can stand on their own and be released on their own (e.g. 2 different webservices)
   * Modules 
 
 ---
