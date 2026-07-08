@@ -8,8 +8,8 @@ class: center, middle
 
 * Build Tool
 * Package Manager
-* Linter
 * Scripting Tool
+* Test Runner
 
 ---
 
@@ -22,7 +22,7 @@ Gradle
 * configured using Kotlin (default since 8.2) instead of hundreds of lines of XML ([declarative in the works](https://declarative.gradle.org/))
 * is very easy to write custom tasks for
 * is more difficult to understand
-* changes often
+* changes more frequently (last Maven breaking change release: 2010, Gradle: 2025)
 
 ---
 
@@ -30,10 +30,11 @@ Gradle
 
 * [Download the latest binary](https://gradle.org/releases/)
 * Extract and bootstrap a new project using a Gradle Wrapper
-
+  ```sh
       mkdir project
       cd project
       ../gradle-9.6.1/bin/gradle init
+  ```
 * Recommended to work with wrapper from now on inside the project
 * Wrapper is a checked in, per project script that downloads and forwards commands to locally installed Gradle version
 * Upgraded using:
