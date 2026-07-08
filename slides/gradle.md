@@ -216,7 +216,17 @@ tasks.register<MyTask>("myTask") {
         myInput = tasks.named<MyTask>("myTask").flatMap{ it.outputFile }
     }
     ```
-
+* Remember, this is code, so referencing tasks as a variable works as well:
+    ```kt
+    val task1 = tasks.register<MyTask>("myTask") {
+        dependsOn("build") 
+        mustRunAfter("helloWorldTask")
+        finalizedBy("deleteTmpFiles")
+    }
+    tasks.register<MyTask2>("myTask2") {
+        myInput = task1.flatMap{ it.outputFile }
+    }
+    ```
 ---
 
 ## Changing Existing Tasks
@@ -255,26 +265,29 @@ tasks.register<MyTask>("myTask") {
 ---
 
 ## Custom Plugin - Build Files
+```kt
+// my-plugin/settings.gradle.kts
+rootProject.name = "my-plugin"
+```
 
-* Similar to our custom task, we need to create our build files in a folder, e.g. **my-plugin/**
+```kt
+// my-plugin/build.gradle.kts
+repositories {
+    mavenCentral()
+}
+plugins {
+    `kotlin-dsl`
+}
+gradlePlugin {
+    plugins {
+        create("myPlugin") {
+            id = "at.fyayc.my-plugin"
+            implementationClass = "at.posselt.FoundryVTTModulePlugin"
+        }
+    }
+}
+```
 
-  ```kt
-  // my-plugin/settings.gradle.kts
-  rootProject.name = "my-plugin"
-  ```
-  
-  ```kt
-  // my-plugin/build.gradle.kts
-  repositories {
-      mavenCentral()
-  }
-  
-  plugins {
-      `kotlin-dsl`
-  }
-  ```
-
-* If you want to publish your plugin instead of keeping it in your repository, [you need a gradlePlugin block](https://docs.gradle.org/current/userguide/preparing_to_publish.html#sec:minimum_configuration), version and group as well
 
 ---
 
@@ -290,7 +303,7 @@ tasks.register<MyTask>("myTask") {
   
   ```kt
   plugins {
-      id(":my-plugin")
+      id("at.fyayc.my-plugin")
   }
   ```
 
